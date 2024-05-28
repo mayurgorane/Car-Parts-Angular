@@ -58,6 +58,8 @@ export class ContainerComponent {
   deletePart(deletePartId:number){
     this.partService.deletePart(deletePartId).subscribe();
   }
+
+  //hi
    
   }
 
