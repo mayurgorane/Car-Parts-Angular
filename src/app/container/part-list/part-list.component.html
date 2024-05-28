@@ -1,0 +1,13 @@
+<div class="card-content">
+  <p><strong>Part ID:</strong> {{ part.partId }}</p>
+  <p><strong>Part Name:</strong> {{ part.partTitle }}</p>
+
+  <p><strong>Company Name:</strong> {{ part.companyName }}</p>
+  <p><strong>Category Name:</strong> {{ part.categoryName }}</p>
+  <p><strong>Model Name:</strong> {{ part.modelName }}</p>
+  <p><strong>Part Price:</strong> {{ part.partPrice }}</p>
+</div>
+<div class="card-actions">
+  <button class="update-button" (click)="edit(part)">Update</button>
+  <button class="delete-button" (click)="deletePart(part.partId)">Delete</button>
+</div>

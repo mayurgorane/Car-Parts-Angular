@@ -1,0 +1,32 @@
+<h2 *ngIf="!data">Add New Part</h2>
+<h2 *ngIf="data">Update Part</h2>
+<form [formGroup]="partForm" (ngSubmit)="addPart()">
+  <div>
+    <label for="company">Company:</label>
+    <select id="company" formControlName="selectedCompanyId" (change)="onCompanyChange()">
+      <option *ngFor="let company of companies" [value]="company.id">{{ company.name }}</option>
+    </select>
+  </div>
+  <div>
+    <label for="model">Model:</label>
+    <select id="model" formControlName="selectedModelId" (change)="onModelChange()" [disabled]="!partForm.get('selectedCompanyId').value">
+      <option *ngFor="let model of models" [value]="model.modelId">{{ model.modelname }}</option>
+    </select>
+  </div>
+  <div>
+    <label for="category">Category:</label>
+    <select id="category" formControlName="selectedCategoryId" [disabled]="!partForm.get('selectedModelId').value">
+      <option *ngFor="let category of categories" [value]="category.categoryId">{{ category.categoryName }}</option>
+    </select>
+  </div>
+  <div>
+    <label for="partTitle">Part Title:</label>
+    <input type="text" id="partTitle" formControlName="partTitle" required>
+  </div>
+  <div>
+    <label for="partPrice">Part Price:</label>
+    <input type="number" id="partPrice" formControlName="partPrice" required>
+  </div>
+  <button type="submit">{{ data ? 'Edit Part' : 'Add Part' }}</button>
+  <button type="button" (click)="closeDialog()">Close</button>
+</form>

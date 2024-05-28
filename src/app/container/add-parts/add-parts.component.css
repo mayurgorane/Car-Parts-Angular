@@ -1,0 +1,61 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: white;
+  padding: 20px;
+  width: 100%; /* Adjust as needed */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+:host > * {
+  flex: 0 0 calc(33.33% - 20px); /* Adjust as needed */
+  margin: 10px;
+}
+
+/* Adjust the width of the last row to fill the remaining space */
+:host > :nth-last-child(-n+3) {
+  flex-basis: 100%; /* Ensure the last row spans the full width */
+}
+
+h2 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 5px 10px;
+  margin-right: 10px;
+}
+
+button[type="button"] {
+  background-color: #f44336;
+  color: white;
+  border: none;
+}
+
+button[type="button"]:hover {
+  background-color: #d32f2f;
+}
+
+button[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+}
+
+button[type="submit"]:hover {
+  background-color: #388e3c;
+}

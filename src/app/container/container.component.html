@@ -1,0 +1,11 @@
+<div class="button-container">
+  <button class="small-red-button" (click)="openModal(null)">Add Parts</button>
+</div>
+
+<div class="part-cards-container">  
+  <div class="part-card" *ngFor="let part of data">
+    <app-part-list [part]="part"  (openModal)="openModal($event)"  (deletePartWithId)="deletePart($event)"  ></app-part-list>
+  </div>
+</div>
+<app-add-parts *ngIf="addPartFlag"  [updatepart]="updatedPart"  ></app-add-parts>
+ 
