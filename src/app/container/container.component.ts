@@ -59,7 +59,7 @@ export class ContainerComponent {
     this.partService.deletePart(deletePartId).subscribe();
   }
 
-  //hi
+ 
    
   }
 
