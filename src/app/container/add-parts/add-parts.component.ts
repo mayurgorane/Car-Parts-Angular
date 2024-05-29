@@ -1,6 +1,5 @@
 import {
   Component,
-  EventEmitter,
   Inject,
   Input,
   OnInit,
@@ -36,11 +35,9 @@ export class AddPartsComponent implements OnInit {
   categories: Category[] = [];
 
   constructor(
-    private formBuilder: FormBuilder,
-    private partService: partsService,
+    private formBuilder: FormBuilder, private partService: partsService,
     private dialogRef: MatDialogRef<AddPartsComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Parts
-  ) {
+    @Inject(MAT_DIALOG_DATA) public data: Parts ) {
     this.createForm();
   }
 
@@ -135,6 +132,8 @@ export class AddPartsComponent implements OnInit {
   closeDialog() {
     this.dialogRef.close();
   }
+
+
   addPart() {
     if (this.partForm.valid) {
       const { selectedCompanyId, selectedModelId, selectedCategoryId, partTitle, partPrice } = this.partForm.value;
@@ -146,7 +145,7 @@ export class AddPartsComponent implements OnInit {
         this.partService.updatePart(this.partForm.value,this.data).subscribe(
           response => {
             console.log('Part successfully updated', response);
-          
+            this.closeDialog();
           },
           error => console.error('There was an error updating part!', error)
         );
@@ -156,13 +155,13 @@ export class AddPartsComponent implements OnInit {
         this.partService.addPart(selectedCompanyId, selectedModelId, selectedCategoryId, partDto).subscribe(
           response => {
             console.log('Part successfully added', response);
-          
+            this.closeDialog();    
           },
           error => console.error('There was an error adding part!', error)
         );
       }
 
-      this.closeDialog();
+      
     }
   }
  

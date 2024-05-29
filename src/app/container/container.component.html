@@ -4,9 +4,29 @@
 
 <div class="part-cards-container">  
   <div class="part-card" *ngFor="let part of data">
-    <app-part-list [part]="part"  (openModal)="openModal($event)"  (deletePartWithId)="deletePart($event)"  ></app-part-list>
+    <app-part-list [part]="part" 
+     (openModal)="openModal($event)"  
+     (deletePartWithId)="deletePart($event)" 
+     (partDetailOpen)="openPartDetail()" 
+     (openInventoryModal)="openInventory($event)"
+     (partObjTransfer)="partObjTransfer($event)"
+     (showForm)="isFormOpen( )"
+     
+     
+    ></app-part-list>
   </div>
 </div>
+<app-part-detail *ngIf="partDetailisOpen"
+ (isCloseButton)="isClose()" 
+[partObj]="partObj1"
+ [Data]="inventoryPart" 
+ [isFormOpen]="formOpen"
+ (isFormClose)="formClose()"
+ (qtyData)="quantityInv($event)"
+ 
+ 
+ ></app-part-detail>
+
 <app-add-parts *ngIf="addPartFlag"  [updatepart]="updatedPart"  ></app-add-parts>
 
  

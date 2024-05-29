@@ -5,6 +5,8 @@ import * as companies from '../../assets/company.json';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPartsComponent } from './add-parts/add-parts.component';
 import { partsService } from '../service/partService.service';
+import { map } from 'rxjs';
+import { PartDetailComponent } from './part-detail/part-detail.component';
 
 @Component({
   selector: 'app-container',
@@ -12,26 +14,37 @@ import { partsService } from '../service/partService.service';
   styleUrl: './container.component.css',
 })
 export class ContainerComponent {
-  data: Parts[] = [];
-   addPartFlag: boolean = false;
+  inventoryPart: Parts;
 
+  quantityData1: Parts;
+  data: Parts[] = [];
+  addPartFlag: boolean = false;
+
+  partDetailisOpen: boolean = false;
+  partObj1: Parts;
   updatedPart: Parts;
-   partId:number
+  partId: number;
 
   http: HttpClient = inject(HttpClient);
   companyData: any = companies;
   showModal: boolean = false;
+  formOpen: boolean = false;
 
-  constructor(private partService: partsService ,public dialog: MatDialog){}
+  constructor(private partService: partsService, public dialog: MatDialog) {}
 
   ngOnInit() {
-    this.getAllParts() ;
-   
+    this.getAllParts();
   }
 
   getAllParts() {
     this.http.get('http://localhost:9090/filterParts').subscribe({
-      next: (response: any) => {        
+      next: (response: any) => {
+        response.forEach((element) => {
+          if (element.qty == null) {
+            element.qty = 0;
+          }
+        });
+
         this.data = response;
       },
       error: (error) => {
@@ -40,28 +53,57 @@ export class ContainerComponent {
     });
   }
 
-  
   openModal(part: Parts) {
     const dialogRef = this.dialog.open(AddPartsComponent, {
-      data: part  
+      data: part,
     });
-    
-    
-    dialogRef.afterClosed().subscribe(result => {
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getAllParts();
       console.log('The dialog was closed');
     });
-    this.updatedPart=part;
-   
-    
+    this.updatedPart = part;
   }
 
-  deletePart(deletePartId:number){
+  deletePart(deletePartId: number) {
     this.partService.deletePart(deletePartId).subscribe();
+    setTimeout(() => {
+      this.getAllParts();
+    }, 1000);
   }
 
- 
-   
+  openPartDetail() {
+    this.partDetailisOpen = true;
+    this.formOpen = false;
+  }
+  isClose() {
+    this.partDetailisOpen = false;
   }
 
- 
- 
+  partObjTransfer(partObjNew: any) {
+    this.partObj1 = partObjNew;
+  }
+
+  openInventory(partNew: number) {
+    this.partDetailisOpen = true;
+    this.inventoryPart = JSON.parse(
+      JSON.stringify(this.data.find((x) => x.partId == partNew))
+    );
+  }
+  isFormOpen() {
+    this.formOpen = true;
+    console.log(this.formOpen);
+  }
+  formClose() {
+    this.formOpen = false;
+  }
+  quantityInv(qtyData: Parts) {
+    // let indexToRemove = this.data.findIndex(item => item.partId === qtyData.partId);
+
+    // if (indexToRemove !== -1) {
+    //   this.data.splice(indexToRemove, 1);
+    // }
+    this.data.find((x) => x.partId == qtyData.partId).qty = qtyData.qty;
+    console.log(this.data);
+  }
+}

@@ -20,9 +20,25 @@
     border-radius: 6px;
     transition: background-color 0.3s ease, transform 0.2s ease;
   }
+  .update-button-details {
+    background-color:lightskyblue;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
   
   .delete-button {
     background-color: #f44336;
+  }
+  .inventory-button{
+    background-color: gray;
+  }
+  .inventory-button:hover {
+    background-color: grey;
   }
   
   .update-button:hover {

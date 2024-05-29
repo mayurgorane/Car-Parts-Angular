@@ -40,7 +40,7 @@ import { consumerPollProducersForChange } from "@angular/core/primitives/signals
     }
 
     deletePart(partId: number): Observable<void> {
-      return this.http.delete<void>(`http://localhost:9090/filterParts/${partId}`);
+      return this.http.delete<any>(`http://localhost:9090/filterParts/${partId}`);
 
     }
     updatePart(data: Parts,value:Parts): Observable<any> {
@@ -49,11 +49,19 @@ import { consumerPollProducersForChange } from "@angular/core/primitives/signals
         partPrice: data.partPrice
         
       }
-      
-      console.log(data);
+        console.log(data);
       const url = `http://localhost:9090/filterParts/${value.partId}`;
       return this.http.put(url,data1  , { responseType: 'text' });
     }
+     
+    getPartDetails(partTitle:string ): Observable<Parts> {
+      return this.http.get<Parts>(`http://localhost:9090/filterParts?partTitle=${partTitle} `);
+    }
+
+
+
+
+
 
     private handleError(error: HttpErrorResponse) {
       let errorMessage = 'Unknown error!';

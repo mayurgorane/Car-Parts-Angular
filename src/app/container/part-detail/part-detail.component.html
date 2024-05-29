@@ -1,0 +1,87 @@
+<div class="overlay" >
+    <div class="popup">
+      <h2 *ngIf="!isFormOpen">Product Details</h2>
+      <h2 *ngIf="isFormOpen">Add Inventory</h2>
+      <div class="content">
+        <section class="container">
+            <button class="close" (click)="close()">x</button>
+          <div class="form">
+            <div class="input-box" *ngIf="!isFormOpen">
+              <label>Part ID</label>
+              <p>{{ partObj.partId }}</p>
+            </div>
+            <div class="input-box" *ngIf="isFormOpen">
+                <label>Part ID</label>
+                <p>{{ Data.partId }}</p>
+              </div>
+
+
+            <div class="input-box" *ngIf="!isFormOpen">
+              <label>Part Title</label>
+              <p>{{ partObj.partTitle }}</p>
+            </div>
+            <div class="input-box" *ngIf="isFormOpen">
+                <label>Part Title</label>
+                <p>{{ Data.partTitle }}</p>
+              </div>
+
+
+
+
+            <div class="input-box" *ngIf="!isFormOpen">
+              <label>Part Price</label>
+              <p>{{ partObj.partPrice }}</p>
+            </div>
+            <div class="input-box" *ngIf="isFormOpen">
+                <label>Part Price</label>
+                <p>{{ Data.partPrice }}</p>
+              </div>
+ 
+
+            <div class="input-box"  *ngIf="!isFormOpen">
+              <label>Model Name</label>
+              <p>{{ partObj.modelName }}</p>
+            </div>
+             
+            <div class="input-box"  *ngIf="isFormOpen">
+                <label>Model Name</label>
+                <p>{{ Data.modelName }}</p>
+              </div>
+
+
+
+            <div class="input-box" *ngIf="!isFormOpen">
+              <label>Category Name</label>
+              <p>{{ partObj.categoryName }}</p>
+            </div>
+            <div class="input-box" *ngIf="isFormOpen">
+                <label>Category Name</label>
+                <p>{{ Data.categoryName }}</p>
+              </div>
+
+
+
+            <div class="input-box"*ngIf="!isFormOpen">
+              <label>Company Name</label>
+              <p>{{ partObj.companyName }}</p>
+            </div>
+            <div class="input-box"*ngIf="isFormOpen">
+                <label>Company Name</label>
+                <p>{{ Data.companyName }}</p>
+              </div>
+          
+              <div class="input-box" *ngIf="isFormOpen">
+                <label>Inventory</label>
+                <div class="inventory-control">
+                  <button (click)="decreaseQty()">-</button>
+                  <input type="number" [(ngModel)]="Data.qty" readonly />
+                  <button (click)="increaseQty()">+</button>
+                </div>
+                <button (click)="getData()">Submit</button>
+              </div>
+  
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>

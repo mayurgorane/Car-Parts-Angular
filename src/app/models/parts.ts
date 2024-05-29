@@ -1,11 +1,9 @@
-export class Parts{
-    partId: number;
-    partTitle:string='';
-    partPrice:number;
-    modelName:string;
-    categoryName:string='';
-    companyName:string='';
-
-   
-
+export class Parts {
+  partId: number;
+  partTitle: string = '';
+  partPrice: number;
+  modelName: string;
+  categoryName: string = '';
+  companyName: string = '';
+  qty: number;
 }
