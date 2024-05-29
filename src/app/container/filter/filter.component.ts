@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Category } from '../../models/category';
 import { Company } from '../../models/company';
@@ -19,6 +19,7 @@ export class FilterComponent {
   models: Model[] = [];
   categories: Category[] = [];
   parts: Parts[] = [];
+  @Output() filteredPartsEvent: EventEmitter<Parts[]> = new EventEmitter<Parts[]>();
 
   constructor(private formBuilder: FormBuilder, private partsService: PartsService) {
     this.createForm();
@@ -28,6 +29,7 @@ export class FilterComponent {
     this.loadCompanies();
     this.loadAllModels();
     this.loadAllCategories();
+    
   }
 
   createForm() {
@@ -37,6 +39,8 @@ export class FilterComponent {
       selectedCategoryId: [{ value: null, disabled: false }]
     });
   }
+
+  
 
   async loadCompanies() {
     try {
@@ -101,11 +105,11 @@ export class FilterComponent {
 
   async loadCategories(companyId: number, modelId: number) {
     try {
-      // Make a HTTP request to fetch categories based on companyId and modelId
+     
       const categories = await this.partsService.getCategoriesForCar(companyId, modelId).toPromise();
-      // Assign the fetched categories to the component property
+      
       this.categories = categories;
-      // Enable the category dropdown
+     
       this.filterForm.get('selectedCategoryId')?.enable();
     } catch (error) {
       console.error('Error loading categories', error);
@@ -114,9 +118,16 @@ export class FilterComponent {
   
   filterParts() {
     const { selectedCompanyId, selectedModelId, selectedCategoryId } = this.filterForm.value;
-    this.partsService.filterParts(selectedCompanyId, selectedModelId, selectedCategoryId).subscribe(
-      parts => this.parts = parts,
-      error => console.error('Error fetching parts', error)
-    );
+    this.partsService.filterParts(selectedCompanyId, selectedModelId, selectedCategoryId)
+      .subscribe(
+        (parts) => {
+          this.parts = parts;
+          this.filteredPartsEvent.emit(this.parts); 
+        },
+        (error) => console.error('Error fetching parts', error)
+      );
+  }
+  checkParts(){
+    console.log(this.parts);
   }
 }

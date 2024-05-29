@@ -19,7 +19,8 @@ export class ContainerComponent {
   quantityData1: Parts;
   data: Parts[] = [];
   addPartFlag: boolean = false;
-
+  
+  filterPart: Parts[] = [];
   partDetailisOpen: boolean = false;
   partObj1: Parts;
   updatedPart: Parts;
@@ -45,7 +46,7 @@ export class ContainerComponent {
           }
         });
 
-        this.data = response;
+        this.filterPart = response;
       },
       error: (error) => {
         console.error('Error fetching parts:', error);
@@ -87,7 +88,7 @@ export class ContainerComponent {
   openInventory(partNew: number) {
     this.partDetailisOpen = true;
     this.inventoryPart = JSON.parse(
-      JSON.stringify(this.data.find((x) => x.partId == partNew))
+      JSON.stringify(this.filterPart.find((x) => x.partId == partNew))
     );
   }
   isFormOpen() {
@@ -98,12 +99,17 @@ export class ContainerComponent {
     this.formOpen = false;
   }
   quantityInv(qtyData: Parts) {
-    // let indexToRemove = this.data.findIndex(item => item.partId === qtyData.partId);
-
-    // if (indexToRemove !== -1) {
-    //   this.data.splice(indexToRemove, 1);
-    // }
-    this.data.find((x) => x.partId == qtyData.partId).qty = qtyData.qty;
-    console.log(this.data);
+ 
+    this.filterPart.find((x) => x.partId == qtyData.partId).qty = qtyData.qty;
+    console.log(this.filterPart);
   }
+
+
+  filterPartEvent(partsArray:Parts[] ){
+    this.filterPart=partsArray;
+    console.log(this.filterPart);
+  }
+
+
+  
 }

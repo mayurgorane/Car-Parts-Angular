@@ -58,11 +58,6 @@ import { consumerPollProducersForChange } from "@angular/core/primitives/signals
       return this.http.get<Parts>(`http://localhost:9090/filterParts?partTitle=${partTitle} `);
     }
 
-
-
-
-
-
     private handleError(error: HttpErrorResponse) {
       let errorMessage = 'Unknown error!';
       if (error.error instanceof ErrorEvent) {

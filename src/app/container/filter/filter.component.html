@@ -22,12 +22,8 @@
     </mat-form-field>
 
     <button mat-raised-button color="primary" type="submit">Filter Parts</button>
+   
   </form>
 
-  <div *ngIf="parts.length" class="results">
-    <h3>Filtered Parts</h3>
-    <ul>
-      <li *ngFor="let part of parts">{{ part.partTitle }} - {{ part.partPrice }}</li>
-    </ul>
-  </div>
+ 
 </div>

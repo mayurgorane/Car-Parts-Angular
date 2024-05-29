@@ -1,63 +1,71 @@
-.card-content p {
-    margin: 12px 0;
-    font-size: 16px;
-    color: #333;
-  }
-  
-  .card-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  .update-button, .delete-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 6px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  .update-button-details {
-    background-color:lightskyblue;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 6px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  .delete-button {
-    background-color: #f44336;
-  }
-  .inventory-button{
-    background-color: gray;
-  }
-  .inventory-button:hover {
-    background-color: grey;
-  }
-  
-  .update-button:hover {
-    background-color: #45a049;
-  }
-  
-  .delete-button:hover {
-    background-color: #e53935;
-  }
-  
-  .update-button:active, .delete-button:active {
-    transform: scale(0.95);
-  }
-  
-  .update-button:focus, .delete-button:focus {
-    outline: none;
-    box-shadow: 0 0 5px 2px rgba(72, 180, 97, 0.6);
-  }
-  
-  .delete-button:focus {
-    box-shadow: 0 0 5px 2px rgba(244, 67, 54, 0.6);
-  }
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.update-button,
+.delete-button,
+.update-button-details,
+.inventory-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 6px 10px; /* Adjust padding */
+  cursor: pointer;
+  font-size: 10px; /* Adjust font size */
+  border-radius: 4px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center; /* Align icon and text vertically */
+}
+
+/* Icon styles */
+.mat-icon {
+  margin-right: 4px; /* Add spacing between icon and text */
+}
+
+.delete-button {
+  background-color: #f44336; /* Red background */
+}
+
+.update-button-details {
+  background-color: lightskyblue;
+}
+
+.inventory-button {
+  background-color: grey;
+}
+
+/* Add some margin between buttons */
+.update-button + .delete-button,
+.delete-button + .update-button-details,
+.update-button-details + .inventory-button {
+  margin-left: 8px;
+}
+
+.update-button:hover,
+.delete-button:hover,
+.update-button-details:hover,
+.inventory-button:hover {
+  background-color: #45a049;
+}
+
+.update-button:active,
+.delete-button:active,
+.update-button-details:active,
+.inventory-button:active {
+  transform: scale(0.95);
+}
+
+.update-button:focus,
+.delete-button:focus,
+.update-button-details:focus,
+.inventory-button:focus {
+  outline: none;
+  box-shadow: 0 0 5px 2px rgba(72, 180, 97, 0.6);
+}
+
+.delete-button:focus {
+  box-shadow: 0 0 5px 2px rgba(244, 67, 54, 0.6);
+}
