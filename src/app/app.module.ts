@@ -16,6 +16,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ContainerComponent } from './container/container.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { PartDetailComponent } from './container/part-detail/part-detail.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
  
 
 @NgModule({
@@ -33,7 +38,13 @@ import { PartDetailComponent } from './container/part-detail/part-detail.compone
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    MatDialogModule,ReactiveFormsModule
+    MatDialogModule,
+    ReactiveFormsModule,
+   BrowserAnimationsModule,
+   MatFormFieldModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatProgressSpinnerModule
   ],
   
   providers: [
