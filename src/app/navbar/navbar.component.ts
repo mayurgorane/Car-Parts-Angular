@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Output } from '@angular/core';
  
 import { MatDialog } from '@angular/material/dialog';
+import { partsService } from '../service/partService.service';
+import { EventEmitter } from 'stream';
 
 @Component({
   selector: 'app-navbar',
@@ -9,6 +11,5 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class NavbarComponent {
  
-
-   
+  
 }

@@ -13,10 +13,10 @@ export class PartDetailComponent implements OnInit {
  
  
  constructor(private partService: partsService ){
-   
+    
  }
 
-
+  
  @Input()Data:Parts;
  @Input()partObj: Parts;
 @Input()isFormOpen:boolean;

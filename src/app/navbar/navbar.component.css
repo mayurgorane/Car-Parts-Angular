@@ -39,4 +39,30 @@
 
 
 
-  
+  /* Style for the Sales button */
+.sales-button {
+  background-color: #007bff; /* Primary blue color */
+  color: white; /* White text color */
+  border: none; /* Remove default button border */
+  padding: 10px 20px; /* Padding inside the button */
+  font-size: 16px; /* Font size of the text */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Cursor style on hover */
+  transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+
+/* Hover effect for the Sales button */
+.sales-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Focus effect for the Sales button */
+.sales-button:focus {
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Blue outline shadow on focus */
+}
+
+/* Active effect for the Sales button */
+.sales-button:active {
+  background-color: #004085; /* Darker blue when button is active (pressed) */
+}

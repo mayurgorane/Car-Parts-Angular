@@ -1,28 +1,30 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Output, inject } from '@angular/core';
+import {Component,OnInit,inject,} from '@angular/core';
 import { Parts } from '../models/parts';
 import * as companies from '../../assets/company.json';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPartsComponent } from './add-parts/add-parts.component';
 import { partsService } from '../service/partService.service';
-import { map } from 'rxjs';
-import { PartDetailComponent } from './part-detail/part-detail.component';
+ 
 
 @Component({
   selector: 'app-container',
   templateUrl: './container.component.html',
   styleUrl: './container.component.css',
 })
-export class ContainerComponent {
+export class ContainerComponent implements OnInit {
   inventoryPart: Parts;
-
+  partObj1: Parts;
+  detailData:Parts;
+   newData:Parts;
   quantityData1: Parts;
   data: Parts[] = [];
+  filteredParts:Parts[] = [];
+ 
   addPartFlag: boolean = false;
-  
-  filterPart: Parts[] = [];
+
   partDetailisOpen: boolean = false;
-  partObj1: Parts;
+
   updatedPart: Parts;
   partId: number;
 
@@ -31,7 +33,9 @@ export class ContainerComponent {
   showModal: boolean = false;
   formOpen: boolean = false;
 
-  constructor(private partService: partsService, public dialog: MatDialog) {}
+  constructor(private partService: partsService, public dialog: MatDialog) {
+
+  }
 
   ngOnInit() {
     this.getAllParts();
@@ -46,12 +50,15 @@ export class ContainerComponent {
           }
         });
 
-        this.filterPart = response;
+        this.filteredParts = response;
+        this.sendObject();
+         
       },
       error: (error) => {
         console.error('Error fetching parts:', error);
-      },
+      },      
     });
+    
   }
 
   openModal(part: Parts) {
@@ -73,9 +80,11 @@ export class ContainerComponent {
     }, 1000);
   }
 
-  openPartDetail() {
+  openPartDetail(parts:Parts) {
     this.partDetailisOpen = true;
     this.formOpen = false;
+    this.detailData = this.filteredParts.find((x)=> x.partId ==parts.partId);
+     
   }
   isClose() {
     this.partDetailisOpen = false;
@@ -87,29 +96,31 @@ export class ContainerComponent {
 
   openInventory(partNew: number) {
     this.partDetailisOpen = true;
-    this.inventoryPart = JSON.parse(
-      JSON.stringify(this.filterPart.find((x) => x.partId == partNew))
-    );
+    this.inventoryPart = this.filteredParts.find((x) => x.partId == partNew);
   }
-  isFormOpen() {
+  isFormOpen(parts:Parts) {
     this.formOpen = true;
-    console.log(this.formOpen);
+     
+    this.newData = this.filteredParts.find((x) => x.partId == parts.partId);;
+    
   }
   formClose() {
     this.formOpen = false;
   }
   quantityInv(qtyData: Parts) {
+    this.filteredParts.find((x) => x.partId == qtyData.partId).qty = qtyData.qty;
+  }
+
+  sendObject() {
+    
  
-    this.filterPart.find((x) => x.partId == qtyData.partId).qty = qtyData.qty;
-    console.log(this.filterPart);
+    this.partService.setObject(this.filteredParts);
   }
 
-
-  filterPartEvent(partsArray:Parts[] ){
-    this.filterPart=partsArray;
-    console.log(this.filterPart);
+  getFilterParts(parts:Parts[]){
+    this.filteredParts= parts;
+    console.log(this.filteredParts);
   }
 
-
-  
+ 
 }
