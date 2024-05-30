@@ -130,4 +130,11 @@ export class FilterComponent {
   checkParts(){
     console.log(this.parts);
   }
+  clearForm() {
+    this.filterForm.reset({
+      selectedCompanyId: null,
+      selectedModelId: null,
+      selectedCategoryId: null
+    });
+  }
 }

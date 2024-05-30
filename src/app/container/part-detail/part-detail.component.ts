@@ -15,13 +15,13 @@ export class PartDetailComponent implements OnInit {
  constructor(private partService: partsService ){
     
  }
-
+ 
   
  @Input()Data:Parts;
  @Input()partObj: Parts;
 @Input()isFormOpen:boolean;
  ngOnInit(){
-     
+       
  }
 
   @Output() isCloseButton: EventEmitter<any>= new EventEmitter<any>();
@@ -39,18 +39,15 @@ formClose(){
   this.isCloseButton.emit();
 }
 
-increaseQty() {
-  if (this.Data) {
-    this.Data.qty++;
-  }
-  
-}
 decreaseQty() {
-  if (this.Data && this.Data.qty > 0) {
+  if (this.Data.qty > 0) {
     this.Data.qty--;
   }
 }
 
+increaseQty() {
+  this.Data.qty++;
+}
 
 getData(){
  

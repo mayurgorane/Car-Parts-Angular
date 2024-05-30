@@ -153,11 +153,14 @@ export class AddPartsComponent implements OnInit {
        
    
         this.partService.addPart(selectedCompanyId, selectedModelId, selectedCategoryId, partDto).subscribe(
-          response => {
+           response => {
+            this.closeDialog(); 
             console.log('Part successfully added', response);
-            this.closeDialog();    
+          
           },
-          error => console.error('There was an error adding part!', error)
+          error => {console.error('There was an error adding part!', error)
+          this.closeDialog();
+          }
         );
       }
 
