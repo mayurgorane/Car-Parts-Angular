@@ -10,6 +10,9 @@ import { Parts } from "../models/parts";
     providedIn: 'root'
   })
   export class PartsService {
+  getObject() {
+    throw new Error('Method not implemented.');
+  }
     private apiUrl = 'http://localhost:9090';
 
     constructor(private http: HttpClient) { }

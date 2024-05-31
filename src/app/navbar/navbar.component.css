@@ -1,68 +1,68 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    background-color: #1f1f1f;
-    color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .title {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .add-part-button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .add-part-button:hover {
-    background-color: #45a049;
-  }
-  
-  .add-part-button:active {
-    background-color: #3e8e41;
-  }
-  
-  .add-part-button:focus {
-    outline: none;
-    box-shadow: 0 0 3px 2px rgba(72, 180, 97, 0.6);
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #1f1f1f;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
 
+.button-container {
+  display: flex;
+  gap: 20px; /* Add gap between buttons */
+}
 
-  /* Style for the Sales button */
+.add-part-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px; /* Make the button smaller */
+  cursor: pointer;
+  font-size: 14px; /* Reduce font size */
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.add-part-button:hover {
+  background-color: #45a049;
+}
+
+.add-part-button:active {
+  background-color: #3e8e41;
+}
+
+.add-part-button:focus {
+  outline: none;
+  box-shadow: 0 0 3px 2px rgba(72, 180, 97, 0.6);
+}
+
+/* Styles for the Sales button */
 .sales-button {
-  background-color: #007bff; /* Primary blue color */
-  color: white; /* White text color */
-  border: none; /* Remove default button border */
-  padding: 10px 20px; /* Padding inside the button */
-  font-size: 16px; /* Font size of the text */
-  border-radius: 4px; /* Rounded corners */
-  cursor: pointer; /* Cursor style on hover */
-  transition: background-color 0.3s ease; /* Smooth background color transition */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* Hover effect for the Sales button */
 .sales-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3;
 }
 
-/* Focus effect for the Sales button */
 .sales-button:focus {
-  outline: none; /* Remove default focus outline */
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Blue outline shadow on focus */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
 }
 
-/* Active effect for the Sales button */
 .sales-button:active {
-  background-color: #004085; /* Darker blue when button is active (pressed) */
+  background-color: #004085;
 }

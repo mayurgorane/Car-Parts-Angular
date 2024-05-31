@@ -23,12 +23,15 @@ export class partsService {
   setObject(data1: any) {
     debugger;
     this.partObject = data1;
-    console.log(this.partObject);
+ 
   }
 
   getObject() {
     return this.partObject;
   }
+
+
+  
 
   ngOnInit() {}
 

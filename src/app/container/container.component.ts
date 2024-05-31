@@ -34,32 +34,40 @@ export class ContainerComponent implements OnInit {
   formOpen: boolean = false;
 
   constructor(private partService: partsService, public dialog: MatDialog) {
-
+    
   }
 
   ngOnInit() {
+    console.log(localStorage);
+  const localData = localStorage.getItem('filteredParts');
+  if (localData) {
+    this.filteredParts = JSON.parse(localData);
+  } else {
     this.getAllParts();
   }
-
-  getAllParts() {
-    this.http.get('http://localhost:9090/filterParts').subscribe({
-      next: (response: any) => {
-        response.forEach((element) => {
-          if (element.qty == null) {
-            element.qty = 0;
-          }
-        });
-
-        this.filteredParts = response;
-        this.sendObject();
-         
-      },
-      error: (error) => {
-        console.error('Error fetching parts:', error);
-      },      
-    });
-    
   }
+    
+ 
+
+ getAllParts() {
+  return this.http.get('http://localhost:9090/filterParts').subscribe({
+   next: (response: any) => {
+     response.forEach((element) => {
+       if (element.qty == null) {
+         element.qty = 0;
+       }
+     });
+
+     this.filteredParts = response;
+     this.send();
+   },
+   error: (error) => {
+     console.error('Error fetching parts:', error);
+   },      
+ });
+  }
+   
+  
 
   openModal(part: Parts) {
     const dialogRef = this.dialog.open(AddPartsComponent, {
@@ -111,16 +119,13 @@ export class ContainerComponent implements OnInit {
     this.filteredParts.find((x) => x.partId == qtyData.partId).qty = qtyData.qty;
   }
 
-  sendObject() {
-    
- 
-    this.partService.setObject(this.filteredParts);
-  }
-
   getFilterParts(parts:Parts[]){
     this.filteredParts= parts;
-    console.log(this.filteredParts);
+    
   }
-
+   
+send( ){
+this.partService.setObject(this.filteredParts);
+}
  
 }

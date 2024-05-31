@@ -1,16 +1,13 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { Parts } from '../../models/parts';
-import { partsService } from '../../service/partService.service';
-import { Subscription } from 'rxjs';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { arrayBuffer } from 'node:stream/consumers';
+import { partsService } from '../../service/partService.service';
 
 @Component({
-  selector: 'app-sales-order',
-  templateUrl: './sales-order.component.html',
-  styleUrl: './sales-order.component.css'
+  selector: 'app-purchase-parts',
+  templateUrl: './purchase-parts.component.html',
+  styleUrl: './purchase-parts.component.css'
 })
-export class SalesOrderComponent {
+export class PurchasePartsComponent {
   availableProducts: any[] = [];
   productForm: FormGroup;
   transferredObject: any[] = [];
@@ -37,7 +34,6 @@ export class SalesOrderComponent {
         amount: selectedProduct.partPrice
       };
       this.selectedProducts.push(productCopy);
-      this.checkPendingInventory();
       this.updateAvailableProducts();
     }
   }
@@ -47,21 +43,18 @@ export class SalesOrderComponent {
     const quantity = Number(inputElement.value);
     product.selectedQty = quantity;
     product.amount = product.partPrice * quantity;
-    this.checkPendingInventory();
-  }
-  checkPendingInventory() {
-    this.isSaveDisabled = this.selectedProducts.some(product => product.qty < product.selectedQty);
   }
 
   saveChanges() {
     this.selectedProducts.forEach(selectedProduct => {
       const product = this.transferredObject.find(p => p.partId === selectedProduct.partId);
       if (product) {
-        product.qty -= selectedProduct.selectedQty;
+        product.qty += selectedProduct.selectedQty; // Increase quantity for purchase
       }
     });
     this.selectedProducts = [];
     this.updateAvailableProducts();
+    console.log(this.transferredObject);
   }
 
   getObj() {
@@ -74,12 +67,12 @@ export class SalesOrderComponent {
     if (removedProduct) {
       const product = this.transferredObject.find(p => p.partId === removedProduct.partId);
       if (product) {
-        product.qty += removedProduct.selectedQty;
+        product.qty -= removedProduct.selectedQty;
       }
     }
-    this.checkPendingInventory();
     this.updateAvailableProducts();
   }
+
   updateAvailableProducts() {
     if (this.transferredObject) {
       this.availableProducts = this.transferredObject.filter(product => product.qty > 0);
@@ -90,6 +83,4 @@ export class SalesOrderComponent {
     return this.selectedProducts.reduce((total, product) => total + product.amount, 0);
   }
 }
-  
- 
  

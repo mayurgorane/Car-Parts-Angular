@@ -1,0 +1,41 @@
+<div class="container">
+    <form [formGroup]="productForm">
+      <label for="productTitle">Product Title:</label>
+      <select id="productTitle" formControlName="productTitle">
+        <option *ngFor="let product of availableProducts" [value]="product.partId">{{ product.partTitle }}</option>
+      </select>
+      <button type="button" (click)="addProduct()" [disabled]="isSaveDisabled1">Add Product</button>
+    </form>
+  
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th>Product Title</th>
+          <th>Rate</th>
+          <th>Inventory Quantity</th>
+           <th>Quantity</th>
+          <th>Amount</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of selectedProducts; let i = index">
+          <td>{{ product.partTitle }}</td>
+          <td>{{ product.partPrice }}</td>
+          <td>{{ product.qty }}</td> 
+          <td><input type="number" min="1" [value]="product.selectedQty" (input)="updateAmount(product, $event)"></td>
+          <td>{{ product.amount }}</td>
+          <td><button type="button" class="remove-button" (click)="removeProduct(i)">Remove</button></td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="4">Total Amount</td>
+          <td>{{ getTotalAmount() }}</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  
+    <button type="button" (click)="saveChanges()" [disabled]="isSaveDisabled">Save</button>
+  </div>
