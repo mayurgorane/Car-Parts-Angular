@@ -1,95 +1,98 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { Parts } from '../../models/parts';
 import { partsService } from '../../service/partService.service';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { arrayBuffer } from 'node:stream/consumers';
-
+interface Parts1 {
+  partId: number;
+  partTitle: string;
+  partPrice: number;
+  modelName: string;
+  qty: number;
+}
 @Component({
   selector: 'app-sales-order',
   templateUrl: './sales-order.component.html',
   styleUrl: './sales-order.component.css'
 })
 export class SalesOrderComponent {
-  availableProducts: any[] = [];
-  productForm: FormGroup;
-  transferredObject: any[] = [];
-  selectedProducts: any[] = [];
-  isSaveDisabled: boolean = false;
-  isSaveDisabled1: boolean = false;
+  transferredObject: Parts[] = [];
+  products: Parts[] = [];
+  
+  inputQty:number;
+inputQuantity: any;
 
-  constructor(private formBuilder: FormBuilder, private partService: partsService) {}
+  constructor(private partService: partsService) {}
 
   ngOnInit() {
-    this.productForm = this.formBuilder.group({
-      productTitle: ['']
-    });
     this.getObj();
-    this.isSaveDisabled1 = this.availableProducts.length === 0;
-  }
-
-  addProduct() {
-    const selectedProduct = this.transferredObject.find(product => product.partId === +this.productForm.value.productTitle);
-    if (selectedProduct) {
-      const productCopy = { 
-        ...selectedProduct, 
-        selectedQty: 1, 
-        amount: selectedProduct.partPrice
-      };
-      this.selectedProducts.push(productCopy);
-      this.checkPendingInventory();
-      this.updateAvailableProducts();
-    }
-  }
-
-  updateAmount(product: any, event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    const quantity = Number(inputElement.value);
-    product.selectedQty = quantity;
-    product.amount = product.partPrice * quantity;
-    this.checkPendingInventory();
-  }
-  checkPendingInventory() {
-    this.isSaveDisabled = this.selectedProducts.some(product => product.qty < product.selectedQty);
-  }
-
-  saveChanges() {
-    this.selectedProducts.forEach(selectedProduct => {
-      const product = this.transferredObject.find(p => p.partId === selectedProduct.partId);
-      if (product) {
-        product.qty -= selectedProduct.selectedQty;
-      }
-    });
-    this.selectedProducts = [];
-    this.updateAvailableProducts();
+    this.addRow();
   }
 
   getObj() {
     this.transferredObject = this.partService.getObject();
-    this.updateAvailableProducts();
+    console.log(this.transferredObject);
   }
 
-  removeProduct(index: number) {
-    const removedProduct = this.selectedProducts.splice(index, 1)[0];
-    if (removedProduct) {
-      const product = this.transferredObject.find(p => p.partId === removedProduct.partId);
-      if (product) {
-        product.qty += removedProduct.selectedQty;
-      }
-    }
-    this.checkPendingInventory();
-    this.updateAvailableProducts();
-  }
-  updateAvailableProducts() {
-    if (this.transferredObject) {
-      this.availableProducts = this.transferredObject.filter(product => product.qty > 0);
-    }
+  addRow() {
+    const newProduct: Parts = {
+      partId: null,
+      partTitle: '',
+      partPrice: 0,
+      modelName: '',
+      qty: 0,
+      companyName: '',
+      categoryName:''
+    };
+    this.products.push(newProduct);
   }
 
-  getTotalAmount(): number {
-    return this.selectedProducts.reduce((total, product) => total + product.amount, 0);
+  onProductSelect(product: Parts, partId: number) {
+    const selectedProduct = this.transferredObject.find(p => p.partId == Number(partId));
+    if (selectedProduct) {
+      product.partId = partId;
+      product.partTitle = selectedProduct.partTitle;
+      product.partPrice = selectedProduct.partPrice;
+      product.modelName = selectedProduct.modelName;
+      product.qty = selectedProduct.qty;
+      product.companyName = selectedProduct.companyName;
+ 
+    }
+    
+       
+        
   }
-}
+
+  onQuantityChange(product: Parts, quantity: number) {
+    if (quantity >= 0) {
+      const selectedProduct = this.transferredObject.find(p => p.partId === product.partId);
+      selectedProduct.qty = quantity;
+      product.partPrice = selectedProduct.partPrice;
+
+    }
+
+  }
+
+  getPendingInventoryQuantity(id:number){
+    if(id){
+      const productId = id;
+      const selectedProduct = this.transferredObject.find(p => p.partId === id);
   
+         //      selectedProduct.qty ? : return selectedProduct.qty : 0;
+         return selectedProduct.qty
+   
+    }
+    return 0;
+    
  
- 
+}
+
+quanityChangeNew(inputQuanity: any ,product:Parts){
+  const productId = product.partId;
+  const selectedProduct = this.transferredObject.find(p => p.partId === product.partId);
+  selectedProduct.qty = selectedProduct.qty - product.qty
+  this.getPendingInventoryQuantity(product.partId);
+  console.log(selectedProduct.partId);
+}
+}

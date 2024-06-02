@@ -15,16 +15,13 @@ import { partsService } from '../service/partService.service';
 export class ContainerComponent implements OnInit {
   inventoryPart: Parts;
   partObj1: Parts;
-  detailData:Parts;
-   newData:Parts;
-  quantityData1: Parts;
+  detailData: Parts;
+  newData: Parts;
   data: Parts[] = [];
-  filteredParts:Parts[] = [];
- 
+  filteredParts: Parts[] = [];
+
   addPartFlag: boolean = false;
-
   partDetailisOpen: boolean = false;
-
   updatedPart: Parts;
   partId: number;
 
@@ -33,41 +30,49 @@ export class ContainerComponent implements OnInit {
   showModal: boolean = false;
   formOpen: boolean = false;
 
-  constructor(private partService: partsService, public dialog: MatDialog) {
-    
-  }
+  constructor(private partService: partsService, public dialog: MatDialog) {}
+   
+
 
   ngOnInit() {
-    console.log(localStorage);
-  const localData = localStorage.getItem('filteredParts');
-  if (localData) {
-    this.filteredParts = JSON.parse(localData);
-  } else {
-    this.getAllParts();
+    this.loadPartsFromLocalStorage();
   }
-  }
-    
- 
 
- getAllParts() {
-  return this.http.get('http://localhost:9090/filterParts').subscribe({
-   next: (response: any) => {
-     response.forEach((element) => {
-       if (element.qty == null) {
-         element.qty = 0;
-       }
-     });
-
-     this.filteredParts = response;
-     this.send();
-   },
-   error: (error) => {
-     console.error('Error fetching parts:', error);
-   },      
- });
+  loadPartsFromLocalStorage() {
+    const localData = localStorage.getItem('filteredParts');
+    if (localData) {
+      console.log('Local storage data found');
+      this.filteredParts = JSON.parse(localData);
+      this.partService.setPartsArray(this.filteredParts);// Keep service in sync
+    } else {
+      console.log('No local storage data found, fetching from server');
+      this.getAllParts();
+     this.filteredParts=  this.partService.getObject();
+    }
   }
-   
-  
+
+  getAllParts() {
+    this.partService.getAllParts().subscribe({
+      next: (response: Parts[]) => {
+        response.forEach((element) => {
+          if (element.qty == null) {
+            element.qty = 0;
+          }
+        });
+        this.filteredParts = response;
+        console.log("Get API called");
+        localStorage.setItem('filteredParts', JSON.stringify(this.filteredParts));
+        this.updatePartsService(); // Update the service with the new array
+      },
+      error: (error) => {
+        console.error('Error fetching parts:', error);
+      },
+    });
+  }
+
+  updatePartsService() {
+    this.partService.setPartsArray(this.filteredParts);
+  }
 
   openModal(part: Parts) {
     const dialogRef = this.dialog.open(AddPartsComponent, {
@@ -75,25 +80,37 @@ export class ContainerComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.getAllParts();
+      if (result) {
+        this.updateLocalStorage(result);
+      }
       console.log('The dialog was closed');
     });
     this.updatedPart = part;
   }
 
   deletePart(deletePartId: number) {
-    this.partService.deletePart(deletePartId).subscribe();
-    setTimeout(() => {
-      this.getAllParts();
-    }, 1000);
+    this.partService.deletePart(deletePartId).subscribe({
+      next: () => {
+        this.removePartFromLocalData(deletePartId);
+      },
+      error: (error) => {
+        console.error('Error deleting part:', error);
+      },
+    });
   }
 
-  openPartDetail(parts:Parts) {
+  removePartFromLocalData(deletePartId: number) {
+    this.filteredParts = this.filteredParts.filter(part => part.partId !== deletePartId);
+    localStorage.setItem('filteredParts', JSON.stringify(this.filteredParts));
+    this.updatePartsService(); // Update the service with the new array
+  }
+
+  openPartDetail(parts: Parts) {
     this.partDetailisOpen = true;
     this.formOpen = false;
-    this.detailData = this.filteredParts.find((x)=> x.partId ==parts.partId);
-     
+    this.detailData = this.filteredParts.find((x) => x.partId === parts.partId);
   }
+
   isClose() {
     this.partDetailisOpen = false;
   }
@@ -104,28 +121,49 @@ export class ContainerComponent implements OnInit {
 
   openInventory(partNew: number) {
     this.partDetailisOpen = true;
-    this.inventoryPart = this.filteredParts.find((x) => x.partId == partNew);
+    this.inventoryPart = this.filteredParts.find((x) => x.partId === partNew);
   }
-  isFormOpen(parts:Parts) {
+
+  isFormOpen(parts: Parts) {
     this.formOpen = true;
-     
-    this.newData = this.filteredParts.find((x) => x.partId == parts.partId);;
-    
+    this.newData = this.filteredParts.find((x) => x.partId === parts.partId);
   }
+
   formClose() {
     this.formOpen = false;
   }
+
   quantityInv(qtyData: Parts) {
-    this.filteredParts.find((x) => x.partId == qtyData.partId).qty = qtyData.qty;
+    const part = this.filteredParts.find((x) => x.partId === qtyData.partId);
+    if (part) {
+      part.qty = qtyData.qty;
+      this.updateLocalStorage(this.filteredParts); // Send updated quantity to the service and local storage
+    }
   }
 
-  getFilterParts(parts:Parts[]){
-    this.filteredParts= parts;
-    
+  getFilterParts(parts: Parts[]) {
+    this.filteredParts = parts;
+    this.updateLocalStorage(this.filteredParts); // Update the service and local storage with the new array
   }
-   
-send( ){
-this.partService.setObject(this.filteredParts);
-}
- 
+
+  updateLocalStorage(parts: Parts[]) {
+    this.filteredParts = parts;
+    this.updatePartsService(); // Update the service with the new array
+    localStorage.setItem('filteredParts', JSON.stringify(this.filteredParts)); // Save to local storage
+  }
+
+  updatePart(part: Parts) {
+    const existingPart = this.filteredParts.find(p => p.partId === part.partId);
+    if (existingPart) {
+      this.partService.updatePart(part, existingPart).subscribe({
+        next: (response) => {
+          console.log('Part updated successfully', response);
+          this.updateLocalStorage(this.filteredParts); // Update the service with the new array
+        },
+        error: (error) => {
+          console.error('Error updating part:', error);
+        },
+      });
+    }
+  }
 }

@@ -32,6 +32,7 @@ import { MatIconModule } from '@angular/material/icon';
     FilterComponent,
     AddPartsComponent,
     PartDetailComponent,
+ 
   ],
   imports: [
     BrowserModule,

@@ -18,24 +18,34 @@ import { consumerPollProducersForChange } from '@angular/core/primitives/signals
 export class partsService {
   private apiUrl = 'http://localhost:9090';
 
-  private partObject: any;
-
-  setObject(data1: any) {
-    debugger;
-    this.partObject = data1;
+  private partObject: Parts[]=[];
  
-  }
-
-  getObject() {
-    return this.partObject;
-  }
-
 
   
 
-  ngOnInit() {}
+  getObject() {
+    return this.partObject;
+  
+  }
+  setPartsArray(parts: Parts[]): void {
+    this.partObject = parts;
+     
+   
+  }
 
-  constructor(private http: HttpClient) {}
+ 
+  ngOnInit() {
+       
+  }
+
+  constructor(private http: HttpClient) {
+   }
+
+  getAllParts() {
+   return this.http.get('http://localhost:9090/filterParts')
+  
+  }
+     
 
   getAllCompanies(): Observable<Company[]> {
     return this.http
@@ -66,25 +76,21 @@ export class partsService {
     categoryId: number,
     partDto: PartDto
   ): Observable<any> {
-    const url = `${this.apiUrl}/companies/${companyId}/cars/${modelId}/categories/${categoryId}/parts`;
+    const url = `${this.apiUrl}/companies/${companyId}/models/${modelId}/categories/${categoryId}/parts`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-
+   
     return this.http
       .post(url, partDto, { headers: headers })
       .pipe(catchError(this.handleError));
+     
   }
 
   deletePart(partId: number): Observable<void> {
     return this.http.delete<any>(`http://localhost:9090/filterParts/${partId}`);
   }
   updatePart(data: Parts, value: Parts): Observable<any> {
-    let data1 = {
-      partTitle: data.partTitle,
-      partPrice: data.partPrice,
-    };
-    console.log(data);
     const url = `http://localhost:9090/filterParts/${value.partId}`;
-    return this.http.put(url, data1, { responseType: 'text' });
+    return this.http.put(url, data, { responseType: 'text' });
   }
 
   getPartDetails(partTitle: string): Observable<Parts> {

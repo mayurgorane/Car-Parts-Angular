@@ -5,7 +5,7 @@ import { SalesRoutingModule } from './sales-routing.module';
  
 import { partsService } from '../service/partService.service';
 import { Parts } from '../models/parts';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -16,7 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     SalesRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class SalesModule { 

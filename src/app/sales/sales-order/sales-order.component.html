@@ -1,14 +1,5 @@
 <div class="container">
-  <button routerLink="">Back</button>
-  <form [formGroup]="productForm">
-    <label for="productTitle">Product Title:</label>
-    <select id="productTitle" formControlName="productTitle">
-      <option *ngFor="let product of availableProducts" [value]="product.partId">{{ product.partTitle }}</option>
-    </select>
-    <button type="button" (click)="addProduct()" [disabled]="isSaveDisabled1">Add Product</button>
-  </form>
-
-  <table class="product-table">
+  <table>
     <thead>
       <tr>
         <th>Product Title</th>
@@ -16,29 +7,28 @@
         <th>Inventory Quantity</th>
         <th>Pending Inventory Quantity</th>
         <th>Quantity</th>
-        <th>Amount</th>
+        <th>Amount</th> 
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of selectedProducts; let i = index">
-        <td>{{ product.partTitle }}</td>
+      <tr *ngFor="let product of products">
+        <td>
+          <select [ngModel]="product.partId" (ngModelChange)="onProductSelect(product, $event)">
+            <option *ngFor="let selectedProduct of transferredObject" [value]="selectedProduct.partId">
+              {{ selectedProduct.partTitle }}
+            </option>
+          </select>
+        </td>
         <td>{{ product.partPrice }}</td>
         <td>{{ product.qty }}</td>
-        <td>{{ product.qty - product.selectedQty }}</td>
-        <td><input type="number" min="1" [value]="product.selectedQty" (input)="updateAmount(product, $event)"></td>
-        <td>{{ product.amount }}</td>
-        <td><button type="button" class="remove-button" (click)="removeProduct(i)">Remove</button></td>
+        <td>{{ getPendingInventoryQuantity(product.partId) }}</td>
+        <td>
+          <input type="number"  [(ngModel)]="inputQuantity" (ngModelChange)="quanityChangeNew($event,product)" />
+        </td>
+      
       </tr>
     </tbody>
-    <tfoot>
-      <tr>
-        <td colspan="4">Total Amount</td>
-        <td>{{ getTotalAmount() }}</td>
-        <td></td>
-      </tr>
-    </tfoot>
   </table>
-
-  <button type="button" (click)="saveChanges()" [disabled]="isSaveDisabled">Save</button>
+  <button (click)="addRow()">Add Row</button>
 </div>
