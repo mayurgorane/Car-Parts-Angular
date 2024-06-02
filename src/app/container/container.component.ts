@@ -43,7 +43,7 @@ export class ContainerComponent implements OnInit {
     if (localData) {
       console.log('Local storage data found');
       this.filteredParts = JSON.parse(localData);
-      this.partService.setPartsArray(this.filteredParts);// Keep service in sync
+      this.partService.setPartsArray(this.filteredParts); 
     } else {
       console.log('No local storage data found, fetching from server');
       this.getAllParts();

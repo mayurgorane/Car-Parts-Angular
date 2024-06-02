@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PurchasePartsComponent } from './purchase-parts/purchase-parts.component';
 import { PurchaseRoutingModule } from './purchase-routing-module';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -13,7 +13,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
      ReactiveFormsModule,
-     PurchaseRoutingModule
+     PurchaseRoutingModule,
+     FormsModule
 
   ]
 })

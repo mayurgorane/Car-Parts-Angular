@@ -21,7 +21,7 @@ export class FilterComponent {
   parts: Parts[] = [];
   @Output() filteredPartsEvent: EventEmitter<Parts[]> = new EventEmitter<Parts[]>();
 
-  constructor(private formBuilder: FormBuilder, private partsService: PartsService) {
+  constructor(private formBuilder: FormBuilder, private partsService: PartsService, private partser:partsService) {
     this.createForm();
   }
 
@@ -120,8 +120,9 @@ export class FilterComponent {
     const { selectedCompanyId, selectedModelId, selectedCategoryId } = this.filterForm.value;
     this.partsService.filterParts(selectedCompanyId, selectedModelId, selectedCategoryId)
       .subscribe(
-        (parts) => {
+        (parts:Parts[]) => {
           this.parts = parts;
+           
           this.filteredPartsEvent.emit(this.parts); 
         },
         (error) => console.error('Error fetching parts', error)

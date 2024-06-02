@@ -4,36 +4,42 @@
       <tr>
         <th>Product Title</th>
         <th>Rate</th>
+        <th>Sold Inventory Quantity</th>
         <th>Inventory Quantity</th>
-        <th>Pending Inventory Quantity</th>
         <th>Quantity</th>
-        <th>Amount</th> 
+        <th>Amount</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of products">
+      <tr *ngFor="let product of products; let i = index">
         <td>
           <select [ngModel]="product.partId" (ngModelChange)="onProductSelect(product, $event)">
             <option *ngFor="let selectedProduct of transferredObject" [value]="selectedProduct.partId">
               {{ selectedProduct.partTitle }}
-            
             </option>
           </select>
         </td>
         <td>{{ product.partPrice }}</td>
-        
         <td>{{ product.qty }}</td>
-        <td>{{getRemainingInventryData(product.partId) }}</td>
+        <td>{{ getRemainingInventoryData(product.partId) }}</td>
         <td>
-          <input type="number"  [(ngModel)]="inputQuantity" (ngModelChange)="quanityChangeNew($event,product)" />
+          <input type="number" [(ngModel)]="product.inputQuantity" (ngModelChange)="quantityChangeNew($event, product)" />
         </td>
+        <td>{{ product.qty * product.partPrice }}</td>
         <td>
-        {{product.qty * product.partPrice}}
+          <button (click)="removeRow(i)">Remove</button>
         </td>
-      
       </tr>
     </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="5">Total Amount:</td>
+        <td>{{ getTotalAmount() }}</td>
+        <td></td>
+      </tr>
+    </tfoot>
   </table>
   <button (click)="addRow()">Add Row</button>
+  <button routerLink=""    (click)="saveProducts()">Save</button>
 </div>

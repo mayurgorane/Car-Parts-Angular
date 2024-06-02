@@ -1,86 +1,98 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { partsService } from '../../service/partService.service';
-
+import { Parts } from '../../models/parts';
+interface PartsObj {
+  partId: number;
+  partTitle: string;
+  partPrice: number;
+  companyName: string;
+  modelName: string;
+  qty: number;
+  categoryName: string;
+  inputQuantity: number;
+}
 @Component({
   selector: 'app-purchase-parts',
   templateUrl: './purchase-parts.component.html',
   styleUrl: './purchase-parts.component.css'
 })
 export class PurchasePartsComponent {
-  availableProducts: any[] = [];
-  productForm: FormGroup;
-  transferredObject: any[] = [];
-  selectedProducts: any[] = [];
-  isSaveDisabled: boolean = false;
-  isSaveDisabled1: boolean = false;
+  transferredObject: Parts[] = [];
+  partsInventory: Map<number, number>;
+  products: PartsObj[] = [];
 
-  constructor(private formBuilder: FormBuilder, private partService: partsService) {}
+  constructor(private partService: partsService) {}
 
   ngOnInit() {
-    this.productForm = this.formBuilder.group({
-      productTitle: ['']
-    });
     this.getObj();
-    this.isSaveDisabled1 = this.availableProducts.length === 0;
-  }
-
-  addProduct() {
-    const selectedProduct = this.transferredObject.find(product => product.partId === +this.productForm.value.productTitle);
-    if (selectedProduct) {
-      const productCopy = { 
-        ...selectedProduct, 
-        selectedQty: 1, 
-        amount: selectedProduct.partPrice
-      };
-      this.selectedProducts.push(productCopy);
-      this.updateAvailableProducts();
-    }
-  }
-
-  updateAmount(product: any, event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    const quantity = Number(inputElement.value);
-    product.selectedQty = quantity;
-    product.amount = product.partPrice * quantity;
-  }
-
-  saveChanges() {
-    this.selectedProducts.forEach(selectedProduct => {
-      const product = this.transferredObject.find(p => p.partId === selectedProduct.partId);
-      if (product) {
-        product.qty += selectedProduct.selectedQty; // Increase quantity for purchase
-      }
-    });
-    this.selectedProducts = [];
-    this.updateAvailableProducts();
-    console.log(this.transferredObject);
+    this.addRow();
   }
 
   getObj() {
+    this.partsInventory = new Map();
     this.transferredObject = this.partService.getObject();
-    this.updateAvailableProducts();
+    this.transferredObject.forEach(obj => {
+      this.partsInventory.set(obj.partId, obj.qty || 0);
+    });
+    console.log(this.transferredObject);
   }
 
-  removeProduct(index: number) {
-    const removedProduct = this.selectedProducts.splice(index, 1)[0];
-    if (removedProduct) {
-      const product = this.transferredObject.find(p => p.partId === removedProduct.partId);
-      if (product) {
-        product.qty -= removedProduct.selectedQty;
+  addRow() {
+    const newProduct: PartsObj = {
+      partId: null,
+      partTitle: '',
+      partPrice: 0,
+      modelName: '',
+      qty: 0,
+      companyName: '',
+      categoryName: '',
+      inputQuantity: 0
+    };
+    this.products.push(newProduct);
+  }
+
+  onProductSelect(product: Parts, partId: number) {
+    const selectedProduct = this.transferredObject.find(p => p.partId === Number(partId));
+    if (selectedProduct) {
+      product.partId = partId;
+      product.partTitle = selectedProduct.partTitle;
+      product.partPrice = selectedProduct.partPrice;
+      product.modelName = selectedProduct.modelName;
+      product.companyName = selectedProduct.companyName;
+    }
+  }
+
+  quantityChangeNew(inputQuantity: any, product: Parts) {
+    const productId = Number(product.partId);
+    const selectedProduct = this.transferredObject.find(p => p.partId === productId);
+    if (selectedProduct && inputQuantity) {
+      selectedProduct.qty += inputQuantity;
+      product.qty += inputQuantity;
+      this.partsInventory.set(selectedProduct.partId, selectedProduct.qty);
+      console.log(this.partsInventory);
+    }
+  }
+
+  getRemainingInventoryData(partId: number) {
+    return this.partsInventory.get(Number(partId));
+  }
+
+  saveProducts() {
+    this.products.forEach(product => {
+      const transferredProduct = this.transferredObject.find(p => p.partId === product.partId);
+      if (transferredProduct) {
+        transferredProduct.qty += product.qty; // Update qty of transferredObject
       }
-    }
-    this.updateAvailableProducts();
+    });
+    console.log('Saved Products:', this.transferredObject);
   }
 
-  updateAvailableProducts() {
-    if (this.transferredObject) {
-      this.availableProducts = this.transferredObject.filter(product => product.qty > 0);
-    }
+  removeRow(index: number) {
+    this.products.splice(index, 1);
   }
-
   getTotalAmount(): number {
-    return this.selectedProducts.reduce((total, product) => total + product.amount, 0);
+    return this.products.reduce((total, product) => total + (product.qty * product.partPrice), 0);
   }
 }
  

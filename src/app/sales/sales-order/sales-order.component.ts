@@ -5,12 +5,15 @@ import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { arrayBuffer } from 'node:stream/consumers';
 import { time } from 'node:console';
-interface Parts1 {
+interface PartsObj {
   partId: number;
   partTitle: string;
   partPrice: number;
+  companyName: string;
   modelName: string;
   qty: number;
+  categoryName:string;
+  inputQuantity:number
 }
 @Component({
   selector: 'app-sales-order',
@@ -19,11 +22,8 @@ interface Parts1 {
 })
 export class SalesOrderComponent {
   transferredObject: Parts[] = [];
-  partsInventory
-  products: Parts[] = [];
-  
-  inputQty:number;
-inputQuantity: any;
+  partsInventory: Map<number, number>;
+  products: PartsObj[] = [];
 
   constructor(private partService: partsService) {}
 
@@ -33,76 +33,70 @@ inputQuantity: any;
   }
 
   getObj() {
-    this.partsInventory=new Map()
+    this.partsInventory = new Map();
     this.transferredObject = this.partService.getObject();
-    this.transferredObject.map(
-      (obj:any)=>{
-       if(obj.qty){
-        this.partsInventory.set(obj.partId,obj.qty)
-       }else{
-        this.partsInventory.set(obj.partId,0)
-       }
-      }
-    )
+    this.transferredObject.forEach(obj => {
+      this.partsInventory.set(obj.partId, obj.qty || 0);
+    });
     console.log(this.transferredObject);
   }
 
   addRow() {
-    const newProduct: Parts = {
+    const newProduct: PartsObj = {
       partId: null,
       partTitle: '',
       partPrice: 0,
       modelName: '',
       qty: 0,
       companyName: '',
-      categoryName:''
+      categoryName: '',
+      inputQuantity: 0
     };
     this.products.push(newProduct);
   }
 
   onProductSelect(product: Parts, partId: number) {
-    const selectedProduct = this.transferredObject.find(p => p.partId == Number(partId));
+    const selectedProduct = this.transferredObject.find(p => p.partId === Number(partId));
     if (selectedProduct) {
       product.partId = partId;
       product.partTitle = selectedProduct.partTitle;
       product.partPrice = selectedProduct.partPrice;
       product.modelName = selectedProduct.modelName;
-      //product.qty = selectedProduct.qty;
       product.companyName = selectedProduct.companyName;
- 
     }
-    
-       
-        
   }
 
-  onQuantityChange(product: Parts, quantity: number) {
-    if (quantity >= 0) {
-      const selectedProduct = this.transferredObject.find(p => p.partId === product.partId);
-      selectedProduct.qty = quantity;
-      product.partPrice = selectedProduct.partPrice;
-
+  quantityChangeNew(inputQuantity: any, product: Parts) {
+    console.log(inputQuantity);
+    const productId = Number(product.partId);
+    const selectedProduct = this.transferredObject.find(p => p.partId === productId);
+    console.log(selectedProduct);
+    if (selectedProduct.qty && inputQuantity) {
+      selectedProduct.qty = selectedProduct.qty - inputQuantity;
+      product.qty += inputQuantity;
+      this.partsInventory.set(selectedProduct.partId, selectedProduct.qty);
+      console.log(this.partsInventory);
     }
-
   }
 
-  
-
-
-quanityChangeNew(inputQuanity: any ,product:Parts){
-  console.log(inputQuanity)
-  const productId = Number(product.partId);
-  const selectedProduct = this.transferredObject.find(p => p.partId == productId);
-  console.log(selectedProduct)
-  if(selectedProduct.qty && inputQuanity){
-   selectedProduct.qty = selectedProduct.qty - inputQuanity
-   product.qty+=inputQuanity
-
-  this.partsInventory.set(selectedProduct.partId,selectedProduct.qty)
-  console.log(this.partsInventory);
+  getRemainingInventoryData(partId: number) {
+    return this.partsInventory.get(Number(partId));
   }
+
+saveProducts() {
+  this.products.forEach(product => {
+    const transferredProduct = this.transferredObject.find(p => p.partId === product.partId);
+    if (transferredProduct) {
+      transferredProduct.qty += product.qty; // Update qty of transferredObject
+    }
+  });
+  console.log('Saved Products:', this.transferredObject);
 }
-getRemainingInventryData(partId) {
-  return this.partsInventory.get(Number(partId))
-}
+
+  removeRow(index: number) {
+    this.products.splice(index, 1);
+  }
+  getTotalAmount(): number {
+    return this.products.reduce((total, product) => total + (product.qty * product.partPrice), 0);
+  }
 }

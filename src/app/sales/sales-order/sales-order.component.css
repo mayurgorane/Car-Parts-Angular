@@ -1,6 +1,5 @@
 .container {
-  width: 100%;
-  padding: 20px;
+  margin: 20px;
 }
 
 table {
@@ -8,24 +7,56 @@ table {
   border-collapse: collapse;
 }
 
-table, th, td {
-  border: 1px solid black;
-}
-
 th, td {
   padding: 10px;
+  border: 1px solid #ddd;
   text-align: left;
 }
 
-button {
+th {
+  background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tfoot td {
+  background-color: #ddd;
+  font-weight: bold;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
   margin-top: 10px;
+}
+
+button {
   padding: 10px 20px;
   background-color: #4CAF50;
   color: white;
   border: none;
   cursor: pointer;
+  margin-left: 10px;
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s ease; /* Smooth hover transition */
 }
 
 button:hover {
   background-color: #45a049;
+  transform: scale(1.05); /* Scale effect on hover */
+}
+
+.add-button {
+  background-color: #2196F3; /* Blue color for Add Row button */
+}
+
+.save-button {
+  background-color: #f44336; /* Red color for Save button */
+}
+
+/* Styling for button icons */
+button i {
+  margin-right: 5px;
 }
