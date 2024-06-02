@@ -4,6 +4,7 @@ import { partsService } from '../../service/partService.service';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { arrayBuffer } from 'node:stream/consumers';
+import { time } from 'node:console';
 interface Parts1 {
   partId: number;
   partTitle: string;
@@ -18,6 +19,7 @@ interface Parts1 {
 })
 export class SalesOrderComponent {
   transferredObject: Parts[] = [];
+  partsInventory
   products: Parts[] = [];
   
   inputQty:number;
@@ -31,7 +33,17 @@ inputQuantity: any;
   }
 
   getObj() {
+    this.partsInventory=new Map()
     this.transferredObject = this.partService.getObject();
+    this.transferredObject.map(
+      (obj:any)=>{
+       if(obj.qty){
+        this.partsInventory.set(obj.partId,obj.qty)
+       }else{
+        this.partsInventory.set(obj.partId,0)
+       }
+      }
+    )
     console.log(this.transferredObject);
   }
 
@@ -55,7 +67,7 @@ inputQuantity: any;
       product.partTitle = selectedProduct.partTitle;
       product.partPrice = selectedProduct.partPrice;
       product.modelName = selectedProduct.modelName;
-      product.qty = selectedProduct.qty;
+      //product.qty = selectedProduct.qty;
       product.companyName = selectedProduct.companyName;
  
     }
@@ -74,25 +86,23 @@ inputQuantity: any;
 
   }
 
-  getPendingInventoryQuantity(id:number){
-    if(id){
-      const productId = id;
-      const selectedProduct = this.transferredObject.find(p => p.partId === id);
   
-         //      selectedProduct.qty ? : return selectedProduct.qty : 0;
-         return selectedProduct.qty
-   
-    }
-    return 0;
-    
- 
-}
+
 
 quanityChangeNew(inputQuanity: any ,product:Parts){
-  const productId = product.partId;
-  const selectedProduct = this.transferredObject.find(p => p.partId === product.partId);
-  selectedProduct.qty = selectedProduct.qty - product.qty
-  this.getPendingInventoryQuantity(product.partId);
-  console.log(selectedProduct.partId);
+  console.log(inputQuanity)
+  const productId = Number(product.partId);
+  const selectedProduct = this.transferredObject.find(p => p.partId == productId);
+  console.log(selectedProduct)
+  if(selectedProduct.qty && inputQuanity){
+   selectedProduct.qty = selectedProduct.qty - inputQuanity
+   product.qty+=inputQuanity
+
+  this.partsInventory.set(selectedProduct.partId,selectedProduct.qty)
+  console.log(this.partsInventory);
+  }
+}
+getRemainingInventryData(partId) {
+  return this.partsInventory.get(Number(partId))
 }
 }

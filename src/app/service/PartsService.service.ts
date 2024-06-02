@@ -13,7 +13,7 @@ import { Parts } from "../models/parts";
   getObject() {
     throw new Error('Method not implemented.');
   }
-    private apiUrl = 'http://localhost:9090';
+    private apiUrl = 'http://localhost:8080';
 
     constructor(private http: HttpClient) { }
   
