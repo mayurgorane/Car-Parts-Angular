@@ -120,10 +120,19 @@ export class FilterComponent {
     const { selectedCompanyId, selectedModelId, selectedCategoryId } = this.filterForm.value;
     this.partsService.filterParts(selectedCompanyId, selectedModelId, selectedCategoryId)
       .subscribe(
-        (parts:Parts[]) => {
-          this.parts = parts;
-           
-          this.filteredPartsEvent.emit(this.parts); 
+        (parts: Parts[]) => {
+          
+          const partsObject = this.partser.getObject();
+  
+ 
+          this.parts = parts.map(part => {
+            const matchingPart = partsObject.find(p => p.partId === part.partId);
+            if (matchingPart) {
+              return { ...part, qty: matchingPart.qty };
+            }
+            return part;
+          });
+             this.filteredPartsEvent.emit(this.parts);
         },
         (error) => console.error('Error fetching parts', error)
       );

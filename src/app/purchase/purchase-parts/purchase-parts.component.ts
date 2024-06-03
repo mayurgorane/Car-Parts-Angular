@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { partsService } from '../../service/partService.service';
 import { Parts } from '../../models/parts';
+import { Router } from '@angular/router';
+ 
 interface PartsObj {
   partId: number;
   partTitle: string;
@@ -21,8 +23,12 @@ export class PurchasePartsComponent {
   transferredObject: Parts[] = [];
   partsInventory: Map<number, number>;
   products: PartsObj[] = [];
+  isDisable: boolean = false;
+  isDisablePart: boolean;
 
-  constructor(private partService: partsService) {}
+  constructor(private partService: partsService, private router: Router) {
+    this.isDisablePart = false;
+  }
 
   ngOnInit() {
     this.getObj();
@@ -31,11 +37,10 @@ export class PurchasePartsComponent {
 
   getObj() {
     this.partsInventory = new Map();
-    this.transferredObject = this.partService.getObject();
-    this.transferredObject.forEach(obj => {
+    this.transferredObject = JSON.parse(JSON.stringify(this.partService.getObject()));
+    this.transferredObject.forEach((obj) => {
       this.partsInventory.set(obj.partId, obj.qty || 0);
     });
-    console.log(this.transferredObject);
   }
 
   addRow() {
@@ -47,52 +52,64 @@ export class PurchasePartsComponent {
       qty: 0,
       companyName: '',
       categoryName: '',
-      inputQuantity: 0
+      inputQuantity: 0,
     };
     this.products.push(newProduct);
   }
 
-  onProductSelect(product: Parts, partId: number) {
-    const selectedProduct = this.transferredObject.find(p => p.partId === Number(partId));
+  onProductSelect(product: PartsObj, partId: number) {
+    if (partId) {
+      this.isDisable = true;
+    }
+    const selectedProduct = this.transferredObject.find((p) => p.partId === Number(partId));
     if (selectedProduct) {
       product.partId = partId;
       product.partTitle = selectedProduct.partTitle;
       product.partPrice = selectedProduct.partPrice;
       product.modelName = selectedProduct.modelName;
       product.companyName = selectedProduct.companyName;
+      product.qty = selectedProduct.qty;
     }
-  }
-
-  quantityChangeNew(inputQuantity: any, product: Parts) {
-    const productId = Number(product.partId);
-    const selectedProduct = this.transferredObject.find(p => p.partId === productId);
-    if (selectedProduct && inputQuantity) {
-      selectedProduct.qty += inputQuantity;
-      product.qty += inputQuantity;
-      this.partsInventory.set(selectedProduct.partId, selectedProduct.qty);
-      console.log(this.partsInventory);
-    }
-  }
-
-  getRemainingInventoryData(partId: number) {
-    return this.partsInventory.get(Number(partId));
   }
 
   saveProducts() {
-    this.products.forEach(product => {
-      const transferredProduct = this.transferredObject.find(p => p.partId === product.partId);
-      if (transferredProduct) {
-        transferredProduct.qty += product.qty; // Update qty of transferredObject
+    
+
+    this.products.forEach((element) => {
+      const selectedProduct = this.transferredObject.find((x) => x.partId == element.partId);
+       
+
+      if (selectedProduct) {
+        selectedProduct.qty = element.qty + element.inputQuantity;
       }
     });
-    console.log('Saved Products:', this.transferredObject);
+
+    
+      this.partService.setPartsArray(this.transferredObject);
+    
   }
 
   removeRow(index: number) {
     this.products.splice(index, 1);
   }
+
   getTotalAmount(): number {
-    return this.products.reduce((total, product) => total + (product.qty * product.partPrice), 0);
+    return this.products.reduce((total, product) => total + product.inputQuantity * product.partPrice, 0);
+  }
+
+  navigateIfNotDisabled() {
+    if (!this.isDisablePart) {
+      this.isDisablePart = false; 
+      this.router.navigate(['/']);
+    }
+  }
+
+  allRowsSelected(): boolean {
+    return this.products.every((product) => product.partId !== null);
+  }
+  onInputChange(product: PartsObj) {
+    if (product.inputQuantity <= 0) {
+      product.inputQuantity = 0;
+    }
   }
 }
- 

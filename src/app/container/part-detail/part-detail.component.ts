@@ -49,9 +49,10 @@ increaseQty() {
   this.Data.qty++;
 }
 
-getData(){
- 
- this.isCloseButton.emit(); 
+getData(qtyInp:any){
+  
+ this.Data.qty = qtyInp.value
+  this.isCloseButton.emit(); 
  this.qtyData.emit(this.Data);
 
 }

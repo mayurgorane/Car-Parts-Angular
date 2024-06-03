@@ -18,11 +18,8 @@ import { consumerPollProducersForChange } from '@angular/core/primitives/signals
 export class partsService {
   private apiUrl = 'http://localhost:9090';
 
-  private partObject: Parts[]=[];
- 
-
+  public partObject: Parts[]=[];
   
-
   getObject() {
     return this.partObject;
   
@@ -32,7 +29,6 @@ export class partsService {
      
    
   }
-
  
   ngOnInit() {
        
@@ -45,8 +41,7 @@ export class partsService {
    return this.http.get('http://localhost:9090/filterParts')
   
   }
-     
-
+  
   getAllCompanies(): Observable<Company[]> {
     return this.http
       .get<Company[]>(`${this.apiUrl}/companies`)
@@ -76,7 +71,7 @@ export class partsService {
     categoryId: number,
     partDto: PartDto
   ): Observable<any> {
-    const url = `${this.apiUrl}/companies/${companyId}/models/${modelId}/categories/${categoryId}/parts`;
+    const url = `http://localhost:9090/companies/${companyId}/models/${modelId}/categories/${categoryId}/parts`;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
    
     return this.http

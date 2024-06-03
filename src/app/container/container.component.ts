@@ -35,40 +35,32 @@ export class ContainerComponent implements OnInit {
 
 
   ngOnInit() {
-    this.loadPartsFromLocalStorage();
-  }
-
-  loadPartsFromLocalStorage() {
-    const localData = localStorage.getItem('filteredParts');
-    if (localData) {
-      console.log('Local storage data found');
-      this.filteredParts = JSON.parse(localData);
-      this.partService.setPartsArray(this.filteredParts); 
-    } else {
-      console.log('No local storage data found, fetching from server');
+    if (this.partService.partObject != null && this.partService.partObject.length == 0) {
       this.getAllParts();
-     this.filteredParts=  this.partService.getObject();
+    } else {
+      this.filteredParts = this.partService.partObject;
     }
   }
 
+  
   getAllParts() {
     this.partService.getAllParts().subscribe({
-      next: (response: Parts[]) => {
+      next: (response: any) => {
         response.forEach((element) => {
           if (element.qty == null) {
             element.qty = 0;
           }
         });
+        this.partService.partObject = response;
         this.filteredParts = response;
-        console.log("Get API called");
-        localStorage.setItem('filteredParts', JSON.stringify(this.filteredParts));
-        this.updatePartsService(); // Update the service with the new array
+      
       },
       error: (error) => {
         console.error('Error fetching parts:', error);
       },
     });
   }
+
 
   updatePartsService() {
     this.partService.setPartsArray(this.filteredParts);
@@ -81,7 +73,7 @@ export class ContainerComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.updateLocalStorage(result);
+         
       }
       console.log('The dialog was closed');
     });
@@ -137,28 +129,23 @@ export class ContainerComponent implements OnInit {
     const part = this.filteredParts.find((x) => x.partId === qtyData.partId);
     if (part) {
       part.qty = qtyData.qty;
-      this.updateLocalStorage(this.filteredParts); // Send updated quantity to the service and local storage
+    
     }
   }
 
   getFilterParts(parts: Parts[]) {
     this.filteredParts = parts;
-    this.updateLocalStorage(this.filteredParts); // Update the service and local storage with the new array
+    
   }
 
-  updateLocalStorage(parts: Parts[]) {
-    this.filteredParts = parts;
-    this.updatePartsService(); // Update the service with the new array
-    localStorage.setItem('filteredParts', JSON.stringify(this.filteredParts)); // Save to local storage
-  }
-
+ 
   updatePart(part: Parts) {
     const existingPart = this.filteredParts.find(p => p.partId === part.partId);
     if (existingPart) {
       this.partService.updatePart(part, existingPart).subscribe({
         next: (response) => {
           console.log('Part updated successfully', response);
-          this.updateLocalStorage(this.filteredParts); // Update the service with the new array
+         
         },
         error: (error) => {
           console.error('Error updating part:', error);

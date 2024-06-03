@@ -72,12 +72,12 @@
               <div class="input-box" *ngIf="isFormOpen">
                 <label>Inventory</label>
                 <div class="inventory-control">
-                  <button (click)="decreaseQty()">-</button>
-                  <input type="number"  [(ngModel)]="Data.qty" />
-                  <button (click)="increaseQty()">+</button>
+                
+                  <input type="number" #qtyInput min="0"/>
+                  
                 </div >
               
-                <button (click)="getData()"    >Submit</button>
+                <button (click)="getData(qtyInput)" >Submit</button>
          
               </div>
   
