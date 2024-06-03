@@ -30,11 +30,14 @@ export class ContainerComponent implements OnInit {
   showModal: boolean = false;
   formOpen: boolean = false;
 
+  
+
   constructor(private partService: partsService, public dialog: MatDialog) {}
    
-
+     
 
   ngOnInit() {
+     
     if (this.partService.partObject != null && this.partService.partObject.length == 0) {
       this.getAllParts();
     } else {
@@ -51,8 +54,9 @@ export class ContainerComponent implements OnInit {
             element.qty = 0;
           }
         });
-        this.partService.partObject = response;
+      
         this.filteredParts = response;
+     this.sendObject();
       
       },
       error: (error) => {
@@ -70,32 +74,27 @@ export class ContainerComponent implements OnInit {
     const dialogRef = this.dialog.open(AddPartsComponent, {
       data: part,
     });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-         
+  
+    dialogRef.afterClosed().subscribe((updatedPart: Parts) => {
+      if (updatedPart) {
+        const index = this.filteredParts.findIndex(p => p.partId === updatedPart.partId);
+        if (index !== -1) {
+          this.filteredParts[index] = updatedPart; 
+        }
       }
+      this.getAllParts();
+      
       console.log('The dialog was closed');
-    });
-    this.updatedPart = part;
+    });  
   }
 
   deletePart(deletePartId: number) {
-    this.partService.deletePart(deletePartId).subscribe({
-      next: () => {
-        this.removePartFromLocalData(deletePartId);
-      },
-      error: (error) => {
-        console.error('Error deleting part:', error);
-      },
-    });
+    this.partService.deletePart(deletePartId).subscribe();
+    setTimeout(() => {
+      this.getAllParts();
+    }, 100);
   }
-
-  removePartFromLocalData(deletePartId: number) {
-    this.filteredParts = this.filteredParts.filter(part => part.partId !== deletePartId);
-    localStorage.setItem('filteredParts', JSON.stringify(this.filteredParts));
-    this.updatePartsService(); // Update the service with the new array
-  }
+ 
 
   openPartDetail(parts: Parts) {
     this.partDetailisOpen = true;
@@ -137,20 +136,14 @@ export class ContainerComponent implements OnInit {
     this.filteredParts = parts;
     
   }
-
  
-  updatePart(part: Parts) {
-    const existingPart = this.filteredParts.find(p => p.partId === part.partId);
-    if (existingPart) {
-      this.partService.updatePart(part, existingPart).subscribe({
-        next: (response) => {
-          console.log('Part updated successfully', response);
-         
-        },
-        error: (error) => {
-          console.error('Error updating part:', error);
-        },
-      });
-    }
+  onPartAdded(addedPart: Parts) {
+    this.filteredParts.push(addedPart);   
+    this.updatePartsService(); 
+  }
+   sendObject() {
+  
+    this.partService.setPartsArray(this.filteredParts);
   }
 }
+ 

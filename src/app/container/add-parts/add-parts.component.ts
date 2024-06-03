@@ -144,7 +144,7 @@ export class AddPartsComponent implements OnInit {
           response => {
             console.log('Part successfully updated', response);
             this.closeDialog();
-            this.partService.getAllParts();
+            
           },
           error => console.error('There was an error updating part!', error)
         );
@@ -153,7 +153,7 @@ export class AddPartsComponent implements OnInit {
            response => {
             this.closeDialog(); 
             console.log('Part successfully added', response);
-            this.partService.getAllParts();
+            
           
           },
           error => {console.error('There was an error adding part!', error)
@@ -165,7 +165,6 @@ export class AddPartsComponent implements OnInit {
     }
   }
  
-
- 
+  
 }
 

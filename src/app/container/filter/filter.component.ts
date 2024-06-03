@@ -121,11 +121,8 @@ export class FilterComponent {
     this.partsService.filterParts(selectedCompanyId, selectedModelId, selectedCategoryId)
       .subscribe(
         (parts: Parts[]) => {
-          
-          const partsObject = this.partser.getObject();
-  
- 
-          this.parts = parts.map(part => {
+        const partsObject = this.partser.getObject();
+               this.parts = parts.map(part => {
             const matchingPart = partsObject.find(p => p.partId === part.partId);
             if (matchingPart) {
               return { ...part, qty: matchingPart.qty };
