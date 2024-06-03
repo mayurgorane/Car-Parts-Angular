@@ -57,6 +57,10 @@
     Add Row
   </button>
   <button 
-    [disabled]="isDisablePart" (click)="saveProducts()"    [ngClass]="{'disabled-button': isDisablePart}">
-Save</button>
+    [disabled]="!isSaveEnabled()"
+    (click)="saveProducts()"
+    [ngClass]="{'disabled-button': !isSaveEnabled()}"
+  >
+    Save
+  </button>
 </div>

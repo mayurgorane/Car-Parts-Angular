@@ -82,27 +82,25 @@ export class SalesOrderComponent {
     }
   }
 
- 
-saveProducts() {
-  this.isDisablePart = false; // Reset the flag
+  saveProducts() {
+    this.isDisablePart = false; // Reset the flag
 
-  this.products.forEach((element) => {
-    const selectedProduct = this.transferredObject.find((x) => x.partId == element.partId);
-    if (selectedProduct && element.inputQuantity > selectedProduct.qty) {
-      this.isDisablePart = true; // Set flag to true if input quantity exceeds inventory
+    this.products.forEach((element) => {
+      const selectedProduct = this.transferredObject.find((x) => x.partId == element.partId);
+      if (selectedProduct && element.inputQuantity > selectedProduct.qty) {
+        this.isDisablePart = true; // Set flag to true if input quantity exceeds inventory
+      }
+
+      if (selectedProduct) {
+        selectedProduct.qty = element.qty - element.inputQuantity;
+      }
+    });
+
+    if (!this.isDisablePart) {
+      this.partService.setPartsArray(this.transferredObject);
+      this.router.navigate(['/']);
     }
-
-    if (selectedProduct) {
-      selectedProduct.qty = element.qty - element.inputQuantity;
-    }
-  });
-
-  if (!this.isDisablePart) {
-    this.partService.setPartsArray(this.transferredObject);
-   
-    this.router.navigate(['/']);
   }
-}
 
   removeRow(index: number) {
     this.products.splice(index, 1);
@@ -122,6 +120,7 @@ saveProducts() {
   allRowsSelected(): boolean {
     return this.products.every((product) => product.partId !== null);
   }
+
   onInputChange(product: PartsObj) {
     if (product.inputQuantity <= 0) {
       product.inputQuantity = 0;
@@ -130,11 +129,10 @@ saveProducts() {
       this.isDisablePart = true;
     } else {
       this.isDisablePart = false;
-     
-     
     }
-  }
+  } 
 
-  
- 
+  isSaveEnabled(): boolean {
+    return this.products.every((product) => product.partId !== null && product.inputQuantity > 0);
+  }
 }
