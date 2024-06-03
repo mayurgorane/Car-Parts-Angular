@@ -74,16 +74,11 @@ export class ContainerComponent implements OnInit {
     const dialogRef = this.dialog.open(AddPartsComponent, {
       data: part,
     });
-  
-    dialogRef.afterClosed().subscribe((updatedPart: Parts) => {
-      if (updatedPart) {
-        const index = this.filteredParts.findIndex(p => p.partId === updatedPart.partId);
-        if (index !== -1) {
-          this.filteredParts[index] = updatedPart; 
-        }
-      }
-      this.getAllParts();
-      
+  dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        
+       }
+       this.getAllParts();
       console.log('The dialog was closed');
     });  
   }
