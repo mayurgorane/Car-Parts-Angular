@@ -140,32 +140,31 @@ export class AddPartsComponent implements OnInit {
       const partDto = { partTitle, partPrice };
      
       if (this.data) {
-         
-        
-        this.partService.updatePart(this.partForm.value,this.data).subscribe(
+      this.partService.updatePart(this.partForm.value,this.data).subscribe(
           response => {
             console.log('Part successfully updated', response);
             this.closeDialog();
+            
           },
           error => console.error('There was an error updating part!', error)
         );
       } else {
-       
-   
         this.partService.addPart(selectedCompanyId, selectedModelId, selectedCategoryId, partDto).subscribe(
-          response => {
+           response => {
+            this.closeDialog(); 
             console.log('Part successfully added', response);
-            this.closeDialog();    
+            
+          
           },
-          error => console.error('There was an error adding part!', error)
+          error => {console.error('There was an error adding part!', error)
+          this.closeDialog();
+          }
         );
-      }
-
+      } 
       
     }
   }
  
-
- 
+  
 }
 

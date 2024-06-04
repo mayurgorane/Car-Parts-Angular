@@ -48,19 +48,15 @@ export class PartListComponent {
     this.deletePartWithId.emit(partId);
   }
 
-  partDetail(partTitle:string){ 
-    this.partDetailOpen.emit();
-    this.partServices.getPartDetails(partTitle).subscribe((response)=>{
-       this.partObj = {...response[0]};
-       this.partObjTransfer.emit(this.partObj);
-      
-    });  
+  partDetail(parts:Parts){ 
+    this.partDetailOpen.emit(parts);
+    
   }
 
   addInventory(parts:Parts){
     this.openInventoryModal.emit(parts.partId);
   
-    this.showForm.emit( );
+    this.showForm.emit(parts);
    
   }
 

@@ -69,15 +69,16 @@
                 <label>Company Name</label>
                 <p>{{ Data.companyName }}</p>
               </div>
-          
               <div class="input-box" *ngIf="isFormOpen">
                 <label>Inventory</label>
                 <div class="inventory-control">
-                  <button (click)="decreaseQty()">-</button>
-                  <input type="number" [(ngModel)]="Data.qty" readonly />
-                  <button (click)="increaseQty()">+</button>
-                </div>
-                <button (click)="getData()">Submit</button>
+                
+                  <input type="number" #qtyInput min="0" [value]="Data.qty" />
+                  
+                </div >
+              
+                <button (click)="getData(qtyInput)" >Submit</button>
+         
               </div>
   
           </div>

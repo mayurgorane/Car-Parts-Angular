@@ -1,0 +1,61 @@
+<div class="container">
+  <button [routerLink]="['/']" routerLinkActive="router-link-active">
+    Back
+  </button>
+  <table>
+    <thead>
+      <tr>
+        <th>Product Title</th>
+        <th>Rate</th>
+        <th>Current Inventory Quantity</th>
+        <th>Inventory Quantity</th>
+        <th>Quantity</th>
+        <th>Amount</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products; let i = index">
+        <td>
+          <select 
+            [ngModel]="product.partId"
+            (ngModelChange)="onProductSelect(product, $event)"
+          >
+            <option
+              *ngFor="let selectedProduct of transferredObject"
+              [value]="selectedProduct.partId"
+            >
+              {{ selectedProduct.partTitle }}
+            </option>
+          </select>
+        </td>
+        <td>{{ product.partPrice }}</td>
+        <td>{{  product.inputQuantity + product.qty }}</td>
+        <td>{{ product.qty }}</td>
+        <td>
+          <input type="number" [(ngModel)]="product.inputQuantity" [disabled]="!isDisable" (change)="onInputChange(product)" min="0" />
+        </td>
+        <td>{{ product.inputQuantity * product.partPrice }}</td>
+        <td>
+          <button (click)="removeRow(i)">Remove</button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="5">Total Amount:</td>
+        <td>{{ getTotalAmount() }}</td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+  <button 
+    [disabled]="!allRowsSelected()" 
+    (click)="addRow()" 
+    [ngClass]="{'disabled-button': !allRowsSelected()}"
+  >
+    Add Row
+  </button>
+  <button 
+    routerLink=""  (click)="saveProducts()" > Save</button>
+</div>

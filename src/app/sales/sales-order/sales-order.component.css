@@ -1,0 +1,117 @@
+.container {
+  margin: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tfoot td {
+  background-color: #ddd;
+  font-weight: bold;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+button:hover {
+  background-color: #45a049;
+  transform: scale(1.05); /* Scale effect on hover */
+}
+
+.add-button {
+  background-color: #2196F3; /* Blue color for Add Row button */
+}
+
+.save-button {
+  background-color: #f44336; /* Red color for Save button */
+}
+
+/* Styling for button icons */
+button i {
+  margin-right: 5px;
+}
+.disabled-button {
+  background-color: #ccc; /* Gray background */
+  color: #666; /* Gray text */
+  cursor: not-allowed; /* Disabled cursor */
+  pointer-events: none; /* Prevent interaction */
+  opacity: 0.6; /* Slightly faded */
+}
+
+.disabled-input {
+  background-color: #f9f9f9; /* Light gray background */
+  color: #666; /* Gray text */
+  cursor: not-allowed; /* Disabled cursor */
+  pointer-events: none; /* Prevent interaction */
+  opacity: 0.6; /* Slightly faded */
+}
+
+.disabled-select {
+  background-color: #f9f9f9; /* Light gray background */
+  color: #666; /* Gray text */
+  cursor: not-allowed; /* Disabled cursor */
+  pointer-events: none; /* Prevent interaction */
+  opacity: 0.6; /* Slightly faded */
+}
+
+.error-button {
+  background-color: #ff6666; /* Red background */
+  color: white; /* White text */
+  cursor: not-allowed; /* Disabled cursor */
+  pointer-events: none; /* Prevent interaction */
+  opacity: 0.8; /* Slightly less faded */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background-color: #f2f2f2;
+  text-align: left;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}

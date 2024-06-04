@@ -6,9 +6,16 @@
   <p><strong>Qty:</strong> {{ part.qty }}</p>
 </div>
 <div class="card-actions">
-  <button class="update-button" (click)="edit(part)">Update</button>
-  <button class="update-button-details" (click)="partDetail(part.partTitle)" >Details</button>
-  <button class="inventory-button" (click)="addInventory(part)" >Inventory</button>
-  <button class="delete-button" (click)="deletePart(part.partId)">Delete</button>
- 
+  <button class="update-button" (click)="edit(part)">
+    <mat-icon>edit</mat-icon> Update
+  </button>
+  <button class="update-button-details" (click)="partDetail(part)">
+    <mat-icon>info</mat-icon> Details
+  </button>
+  <button class="inventory-button" (click)="addInventory(part)">
+    <mat-icon>store</mat-icon> Inventory
+  </button>
+  <button class="delete-button" (click)="deletePart(part.partId)">
+    <mat-icon>delete</mat-icon> Delete
+  </button>
 </div>

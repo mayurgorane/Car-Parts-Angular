@@ -1,27 +1,27 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Output, inject } from '@angular/core';
+import {Component,OnInit,inject,} from '@angular/core';
 import { Parts } from '../models/parts';
 import * as companies from '../../assets/company.json';
 import { MatDialog } from '@angular/material/dialog';
 import { AddPartsComponent } from './add-parts/add-parts.component';
 import { partsService } from '../service/partService.service';
-import { map } from 'rxjs';
-import { PartDetailComponent } from './part-detail/part-detail.component';
+ 
 
 @Component({
   selector: 'app-container',
   templateUrl: './container.component.html',
   styleUrl: './container.component.css',
 })
-export class ContainerComponent {
+export class ContainerComponent implements OnInit {
   inventoryPart: Parts;
-
-  quantityData1: Parts;
-  data: Parts[] = [];
-  addPartFlag: boolean = false;
-
-  partDetailisOpen: boolean = false;
   partObj1: Parts;
+  detailData: Parts;
+  newData: Parts;
+  data: Parts[] = [];
+  filteredParts: Parts[] = [];
+
+  addPartFlag: boolean = false;
+  partDetailisOpen: boolean = false;
   updatedPart: Parts;
   partId: number;
 
@@ -30,22 +30,34 @@ export class ContainerComponent {
   showModal: boolean = false;
   formOpen: boolean = false;
 
+  
+
   constructor(private partService: partsService, public dialog: MatDialog) {}
+   
+     
 
   ngOnInit() {
-    this.getAllParts();
+     
+    if (this.partService.partObject != null && this.partService.partObject.length == 0) {
+      this.getAllParts();
+    } else {
+      this.filteredParts = this.partService.partObject;
+    }
   }
 
+  
   getAllParts() {
-    this.http.get('http://localhost:9090/filterParts').subscribe({
+    this.partService.getAllParts().subscribe({
       next: (response: any) => {
         response.forEach((element) => {
           if (element.qty == null) {
             element.qty = 0;
           }
         });
-
-        this.data = response;
+      
+        this.filteredParts = response;
+     this.sendObject();
+      
       },
       error: (error) => {
         console.error('Error fetching parts:', error);
@@ -53,29 +65,38 @@ export class ContainerComponent {
     });
   }
 
+
+  updatePartsService() {
+    this.partService.setPartsArray(this.filteredParts);
+  }
+
   openModal(part: Parts) {
     const dialogRef = this.dialog.open(AddPartsComponent, {
       data: part,
     });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      this.getAllParts();
+  dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        
+       }
+       this.getAllParts();
       console.log('The dialog was closed');
-    });
-    this.updatedPart = part;
+    });  
   }
 
   deletePart(deletePartId: number) {
     this.partService.deletePart(deletePartId).subscribe();
     setTimeout(() => {
       this.getAllParts();
-    }, 1000);
+    }, 100);
   }
+ 
 
-  openPartDetail() {
+  openPartDetail(parts: Parts) {
     this.partDetailisOpen = true;
     this.formOpen = false;
+    this.detailData = this.filteredParts.find((x) => x.partId === parts.partId);
   }
+
   isClose() {
     this.partDetailisOpen = false;
   }
@@ -86,24 +107,38 @@ export class ContainerComponent {
 
   openInventory(partNew: number) {
     this.partDetailisOpen = true;
-    this.inventoryPart = JSON.parse(
-      JSON.stringify(this.data.find((x) => x.partId == partNew))
-    );
+    this.inventoryPart = this.filteredParts.find((x) => x.partId === partNew);
   }
-  isFormOpen() {
+
+  isFormOpen(parts: Parts) {
     this.formOpen = true;
-    console.log(this.formOpen);
+    this.newData = this.filteredParts.find((x) => x.partId === parts.partId);
   }
+
   formClose() {
     this.formOpen = false;
   }
-  quantityInv(qtyData: Parts) {
-    // let indexToRemove = this.data.findIndex(item => item.partId === qtyData.partId);
 
-    // if (indexToRemove !== -1) {
-    //   this.data.splice(indexToRemove, 1);
-    // }
-    this.data.find((x) => x.partId == qtyData.partId).qty = qtyData.qty;
-    console.log(this.data);
+  quantityInv(qtyData: Parts) {
+    const part = this.filteredParts.find((x) => x.partId === qtyData.partId);
+    if (part) {
+      part.qty = qtyData.qty;
+    
+    }
+  }
+
+  getFilterParts(parts: Parts[]) {
+    this.filteredParts = parts;
+    
+  }
+ 
+  onPartAdded(addedPart: Parts) {
+    this.filteredParts.push(addedPart);   
+    this.updatePartsService(); 
+  }
+   sendObject() {
+  
+    this.partService.setPartsArray(this.filteredParts);
   }
 }
+ 

@@ -11,55 +11,42 @@ import { PartListComponent } from '../part-list/part-list.component';
 })
 export class PartDetailComponent implements OnInit {
  
- 
- constructor(private partService: partsService ){
-   
- }
+  @Input() Data: Parts;
+  @Input() partObj: Parts;
+  @Input() isFormOpen: boolean;
 
+  @Output() isCloseButton: EventEmitter<any> = new EventEmitter<any>();
+  @Output() isFormClose: EventEmitter<any> = new EventEmitter<any>();
+  @Output() qtyData: EventEmitter<any> = new EventEmitter<any>();
 
- @Input()Data:Parts;
- @Input()partObj: Parts;
-@Input()isFormOpen:boolean;
- ngOnInit(){
-     
- }
+  ngOnInit() {
+  }
 
-  @Output() isCloseButton: EventEmitter<any>= new EventEmitter<any>();
-  @Output() isFormClose: EventEmitter<any>= new EventEmitter<any>(); 
-  @Output() qtyData: EventEmitter<any>= new EventEmitter<any>(); 
- 
-close(){
-  
-  this.isCloseButton.emit();
-  
-}
+  close() {
+    this.isCloseButton.emit();
+  }
 
-formClose(){
-  this.isFormClose.emit();
-  this.isCloseButton.emit();
-}
+  formClose() {
+    this.isFormClose.emit();
+    this.isCloseButton.emit();
+  }
 
-increaseQty() {
-  if (this.Data) {
+  decreaseQty() {
+    if (this.Data.qty > 0) {
+      this.Data.qty--;
+    }
+  }
+
+  increaseQty() {
     this.Data.qty++;
   }
-  
-}
-decreaseQty() {
-  if (this.Data && this.Data.qty > 0) {
-    this.Data.qty--;
+
+  getData(qtyInp: any) {
+    this.Data.qty = qtyInp.value;
+    this.isCloseButton.emit();
+    this.qtyData.emit(this.Data);
   }
 }
 
-
-getData(){
  
- this.isCloseButton.emit(); 
- this.qtyData.emit(this.Data);
-
-}
-
-
  
-
-}

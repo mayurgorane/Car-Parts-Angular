@@ -1,32 +1,30 @@
+ 
+
 <div class="button-container">
+  <app-filter (filteredPartsEvent)="getFilterParts($event)" ></app-filter>
   <button class="small-red-button" (click)="openModal(null)">Add Parts</button>
 </div>
 
 <div class="part-cards-container">  
-  <div class="part-card" *ngFor="let part of data">
+  <div class="part-card" *ngFor="let part of filteredParts">
     <app-part-list [part]="part" 
      (openModal)="openModal($event)"  
      (deletePartWithId)="deletePart($event)" 
-     (partDetailOpen)="openPartDetail()" 
+     (partDetailOpen)="openPartDetail($event)" 
      (openInventoryModal)="openInventory($event)"
      (partObjTransfer)="partObjTransfer($event)"
-     (showForm)="isFormOpen( )"
-     
-     
+     (showForm)="isFormOpen($event)"
     ></app-part-list>
   </div>
 </div>
+
 <app-part-detail *ngIf="partDetailisOpen"
  (isCloseButton)="isClose()" 
-[partObj]="partObj1"
- [Data]="inventoryPart" 
+[partObj]="detailData"
+ [Data]="newData" 
  [isFormOpen]="formOpen"
  (isFormClose)="formClose()"
  (qtyData)="quantityInv($event)"
- 
- 
  ></app-part-detail>
-
-<app-add-parts *ngIf="addPartFlag"  [updatepart]="updatedPart"  ></app-add-parts>
-
  
+<app-add-parts *ngIf="addPartFlag"   ></app-add-parts>

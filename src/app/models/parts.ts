@@ -3,7 +3,8 @@ export class Parts {
   partTitle: string = '';
   partPrice: number;
   modelName: string;
+   qty: number;
+ 
   categoryName: string = '';
   companyName: string = '';
-  qty: number;
 }

@@ -1,1 +1,29 @@
-<p>filter works!</p>
+<div class="container">
+  <form [formGroup]="filterForm" (ngSubmit)="filterParts()">
+    <mat-form-field appearance="fill">
+      <mat-label>Company</mat-label>
+      <mat-select formControlName="selectedCompanyId" (selectionChange)="onCompanyChange()">
+        <mat-option *ngFor="let company of companies" [value]="company.id">{{ company.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Model</mat-label>
+      <mat-select formControlName="selectedModelId" (selectionChange)="onModelChange()" [disabled]="!models.length">
+        <mat-option *ngFor="let model of models" [value]="model.modelId">{{ model.modelname }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="selectedCategoryId" [disabled]="!categories.length">
+        <mat-option *ngFor="let category of categories" [value]="category.categoryId">{{ category.categoryName }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Filter Parts</button>
+    <button mat-raised-button class="button button2" (click)="clearForm()">Clear</button>
+  </form>
+
+ 
+</div>
