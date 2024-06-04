@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { Parts } from '../../models/parts';
 import { partsService } from '../../service/partService.service';
-import { Subscription } from 'rxjs';
+import { Subscription, map } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { arrayBuffer } from 'node:stream/consumers';
 import { time } from 'node:console';
@@ -167,5 +167,10 @@ export class SalesOrderComponent {
 
   isRowDisabled(product: PartsObj): boolean {
     return product.partId === null;
+  }
+  availableParts1(){
+    this.availableParts = this.transferredObject.filter((m)=>  m.qty > 0)
+    return this.availableParts;
+  
   }
 }

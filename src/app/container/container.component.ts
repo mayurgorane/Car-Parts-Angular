@@ -154,5 +154,6 @@ export class ContainerComponent implements OnInit {
   
     this.partService.setPartsArray(this.filteredParts);
   }
+
 }
  

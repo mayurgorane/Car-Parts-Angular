@@ -143,5 +143,8 @@ export class FilterComponent {
       selectedModelId: null,
       selectedCategoryId: null
     });
+    
+
+  
   }
 }
