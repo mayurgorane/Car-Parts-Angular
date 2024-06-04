@@ -8,29 +8,14 @@
 .mat-form-field {
   flex: 1;
   margin-right: 10px;
+  font-size: 12px; /* Adjust the font size for thinner appearance */
+  height: 36px; /* Reduce the height of the form field */
 }
 
-button[type="submit"] {
-  min-width: 120px;
+button[type="submit"],
+button.button2 {
+  min-width: 100px; /* Adjust button width for alignment */
   margin-left: 10px;
-  margin-right: 10px; /* Add margin between the two buttons */
+  margin-right: 10px;
+  font-size: 12px; /* Adjust the font size for thinner appearance */
 }
-
-.mat-form-field-wrapper {
-  border-radius: 5px; /* Add rounded corners to the form field */
-}
-
-.mat-select-trigger {
-  border-radius: 5px; /* Add rounded corners to the select trigger */
-  padding: 10px; /* Add padding to the select trigger */
-  background-color: #f0f0f0; /* Change background color */
-}
-
-.mat-option {
-  padding: 10px; /* Add padding to the options */
-}
-
-.mat-option:hover {
-  background-color: #e0e0e0; /* Change background color on hover */
-}
-.button2 {background-color: #008CBA;} /* Blue */

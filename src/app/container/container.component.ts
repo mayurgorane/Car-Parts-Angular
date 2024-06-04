@@ -53,18 +53,27 @@ export class ContainerComponent implements OnInit {
           if (element.qty == null) {
             element.qty = 0;
           }
-        });
-      
+        }); 
+        if (this.filteredParts.length > 0) {
+          const existingPartsMap = new Map(this.filteredParts.map(part => [part.partId, part]));
+          response.forEach(newPart => {
+            const existingPart = existingPartsMap.get(newPart.partId);
+            if (existingPart) {
+              newPart.qty = existingPart.qty;  
+            } else {
+              newPart.qty = 0; 
+            }
+          });
+        }
+  
         this.filteredParts = response;
-     this.sendObject();
-      
+        this.sendObject();
       },
       error: (error) => {
         console.error('Error fetching parts:', error);
       },
     });
   }
-
 
   updatePartsService() {
     this.partService.setPartsArray(this.filteredParts);
@@ -86,8 +95,13 @@ export class ContainerComponent implements OnInit {
   deletePart(deletePartId: number) {
     this.partService.deletePart(deletePartId).subscribe();
     setTimeout(() => {
-      this.getAllParts();
-    }, 100);
+      this.getAllParts()
+     
+    }, 50);
+    setTimeout(() => {
+      alert('Part successfully deleted')
+     
+    }, 75);
   }
  
 

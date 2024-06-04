@@ -128,7 +128,6 @@ export class AddPartsComponent implements OnInit {
   }
 
   
-
   closeDialog() {
     this.dialogRef.close();
   }
@@ -142,9 +141,14 @@ export class AddPartsComponent implements OnInit {
       if (this.data) {
       this.partService.updatePart(this.partForm.value,this.data).subscribe(
           response => {
+           
             console.log('Part successfully updated', response);
+          
             this.closeDialog();
-            
+            return  setTimeout(() => {
+              alert('Part successfully updated');
+            }, 100); 
+          
           },
           error => console.error('There was an error updating part!', error)
         );
@@ -152,11 +156,14 @@ export class AddPartsComponent implements OnInit {
         this.partService.addPart(selectedCompanyId, selectedModelId, selectedCategoryId, partDto).subscribe(
            response => {
             this.closeDialog(); 
-            console.log('Part successfully added', response);
-            
+            return  setTimeout(() => {
+              alert('Part successfully Added');
+            }, 100); 
+ 
           
           },
           error => {console.error('There was an error adding part!', error)
+          
           this.closeDialog();
           }
         );

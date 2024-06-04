@@ -65,19 +65,8 @@ export class partsService {
       .pipe(catchError(this.handleError));
   }
 
-  addPart(
-    companyId: number,
-    modelId: number,
-    categoryId: number,
-    partDto: PartDto
-  ): Observable<any> {
-    const url = `http://localhost:9090/companies/${companyId}/models/${modelId}/categories/${categoryId}/parts`;
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-   
-    return this.http
-      .post(url, partDto, { headers: headers })
-      .pipe(catchError(this.handleError));
-     
+  addPart(companyId: number, modelId: number, categoryId: number, partDto: PartDto): Observable<any> {
+    return this.http.post<PartDto>(`http://localhost:9090/companies/${companyId}/models/${modelId}/categories/${categoryId}/parts`, partDto);
   }
 
   deletePart(partId: number): Observable<void> {

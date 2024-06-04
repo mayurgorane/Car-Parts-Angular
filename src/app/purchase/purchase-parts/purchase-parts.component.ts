@@ -55,13 +55,28 @@ export class PurchasePartsComponent {
       inputQuantity: 0,
     };
     this.products.push(newProduct);
+     
   }
 
   onProductSelect(product: PartsObj, partId: number) {
-    if (partId) {
-      this.isDisable = true;
+ 
+    if (this.products.filter((x) => x.partId == product.partId).length > 1) {
+      product = {
+        partId: null,
+        partTitle: '',
+        partPrice: 0,
+        modelName: '',
+        qty: 0,
+        companyName: '',
+        categoryName: '',
+        inputQuantity: 0,
+      };
+           this.products[ partId] = product;
+         return  alert('Item already added');;
     }
-    const selectedProduct = this.transferredObject.find((p) => p.partId === Number(partId));
+    const selectedProduct = this.transferredObject.find(
+      (p) => p.partId === Number(partId)
+    );
     if (selectedProduct) {
       product.partId = partId;
       product.partTitle = selectedProduct.partTitle;
@@ -69,24 +84,27 @@ export class PurchasePartsComponent {
       product.modelName = selectedProduct.modelName;
       product.companyName = selectedProduct.companyName;
       product.qty = selectedProduct.qty;
-    }
+    } 
+    product.inputQuantity = product.partId ? product.inputQuantity : 0;  
+    this.isRowDisabled(product);
   }
 
   saveProducts() {
-    
+    this.isDisablePart = false;
 
     this.products.forEach((element) => {
-      const selectedProduct = this.transferredObject.find((x) => x.partId == element.partId);
-       
-
+      const selectedProduct = this.transferredObject.find(
+        (x) => x.partId == element.partId
+      ); 
       if (selectedProduct) {
         selectedProduct.qty = element.qty + element.inputQuantity;
       }
     });
 
-    
+    if (!this.isDisablePart) {
       this.partService.setPartsArray(this.transferredObject);
-    
+      this.router.navigate(['/']);
+    }
   }
 
   removeRow(index: number) {
@@ -110,6 +128,21 @@ export class PurchasePartsComponent {
   onInputChange(product: PartsObj) {
     if (product.inputQuantity <= 0) {
       product.inputQuantity = 0;
+   
     }
+    if(product.inputQuantity < 0){
+      return alert("Parts should be greater than zero");
+    }
+
+    this.isRowDisabled(product);  
   }
+  isRowDisabled(product: PartsObj): boolean {
+    return product.partId === null;
+  }
+  isSaveEnabled(): boolean {
+    return this.products.every(
+      (product) => product.partId !== null && product.inputQuantity !== 0
+    );
+  }
+ 
 }

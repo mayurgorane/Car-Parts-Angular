@@ -1,117 +1,168 @@
 .container {
-  margin: 20px;
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: left;
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
-tbody tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-tfoot td {
-  background-color: #ddd;
-  font-weight: bold;
-}
-
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-}
-
+/* Button styles */
 button {
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: white;
   border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
   cursor: pointer;
-  margin-left: 10px;
-  border-radius: 5px; /* Rounded corners */
-  transition: background-color 0.3s ease; /* Smooth hover transition */
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin: 5px;
 }
 
 button:hover {
-  background-color: #45a049;
-  transform: scale(1.05); /* Scale effect on hover */
+  transform: translateY(-2px);
 }
 
-.add-button {
-  background-color: #2196F3; /* Blue color for Add Row button */
+button:disabled,
+button.disabled-button {
+  cursor: not-allowed;
 }
 
-.save-button {
-  background-color: #f44336; /* Red color for Save button */
+button[routerLink] {
+  background-color: #3498db;
+  color: #fff;
 }
 
-/* Styling for button icons */
-button i {
-  margin-right: 5px;
-}
-.disabled-button {
-  background-color: #ccc; /* Gray background */
-  color: #666; /* Gray text */
-  cursor: not-allowed; /* Disabled cursor */
-  pointer-events: none; /* Prevent interaction */
-  opacity: 0.6; /* Slightly faded */
+button[routerLink]:hover {
+  background-color: #2980b9;
 }
 
-.disabled-input {
-  background-color: #f9f9f9; /* Light gray background */
-  color: #666; /* Gray text */
-  cursor: not-allowed; /* Disabled cursor */
-  pointer-events: none; /* Prevent interaction */
-  opacity: 0.6; /* Slightly faded */
+button.save-button {
+  background-color: #2ecc71;
+  color: #fff;
 }
 
-.disabled-select {
-  background-color: #f9f9f9; /* Light gray background */
-  color: #666; /* Gray text */
-  cursor: not-allowed; /* Disabled cursor */
-  pointer-events: none; /* Prevent interaction */
-  opacity: 0.6; /* Slightly faded */
+button.save-button:hover {
+  background-color: #27ae60;
 }
 
-.error-button {
-  background-color: #ff6666; /* Red background */
-  color: white; /* White text */
-  cursor: not-allowed; /* Disabled cursor */
-  pointer-events: none; /* Prevent interaction */
-  opacity: 0.8; /* Slightly less faded */
+button.add-row-button {
+  background-color: #4863a0; /* Adjusted color for add row button */
+  color: #fff;
 }
 
+button.add-row-button:hover {
+  background-color: #3a4f7a; /* Darker shade for hover effect */
+}
+
+button.remove-button {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+button.remove-button:hover {
+  background-color: #c0392b;
+}
+
+button.back-button {
+  background-color: #576c99; /* Adjusted color for back button */
+  color: #fff;
+}
+
+button.back-button:hover {
+  background-color: #465c84; /* Darker shade for hover effect */
+}
+
+/* Table styles */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
+  margin-top: 20px;
+  font-family: 'Arial', sans-serif;
 }
 
-table, th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
+thead {
+  background-color: #3498db;
+  color: #fff;
 }
 
-th {
-  background-color: #f2f2f2;
+thead th {
+  padding: 15px;
   text-align: left;
+  font-weight: bold;
 }
 
-tr:nth-child(even) {
-  background-color: #f9f9f9;
+tbody tr {
+  border-bottom: 1px solid #dddddd;
+  transition: background-color 0.3s ease;
 }
 
-tr:hover {
-  background-color: #f1f1f1;
+tbody tr:nth-child(even) {
+  background-color: #ecf0f1;
+}
+
+tbody tr:hover {
+  background-color: #bdc3c7;
+}
+
+tbody td {
+  padding: 15px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* Footer styles */
+tfoot {
+  background-color: #ecf0f1;
+}
+
+tfoot td {
+  padding: 15px;
+  text-align: left;
+  font-weight: bold;
+}
+
+/* Form element styles */
+select,
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #bdc3c7;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:focus,
+input[type="number"]:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+select:disabled,
+input[type="number"]:disabled {
+  background-color: #e9ecef;
+}
+
+/* Additional utility styles */
+.text-right {
+  text-align: right;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+/* Custom styles for table footer */
+tfoot td {
+  background-color: #ecf0f1;
+  font-weight: bold;
+  padding: 15px;
+  text-align: right;
 }

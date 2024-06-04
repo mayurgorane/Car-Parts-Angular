@@ -21,8 +21,6 @@ interface PartsObj {
   qty: number;
   categoryName: string;
   inputQuantity: number;
-  
-
 }
 @Component({
   selector: 'app-sales-order',
@@ -35,6 +33,8 @@ export class SalesOrderComponent {
   products: PartsObj[] = [];
   isDisable: boolean = false;
   isDisablePart: boolean;
+  availableParts: Parts[];
+ 
 
   constructor(private partService: partsService, private router: Router) {
     this.isDisablePart = false;
@@ -47,7 +47,9 @@ export class SalesOrderComponent {
 
   getObj() {
     this.partsInventory = new Map();
-    this.transferredObject = JSON.parse(JSON.stringify(this.partService.getObject()));
+    this.transferredObject = JSON.parse(
+      JSON.stringify(this.partService.getObject())
+    );
     this.transferredObject.forEach((obj) => {
       this.partsInventory.set(obj.partId, obj.qty || 0);
     });
@@ -64,14 +66,29 @@ export class SalesOrderComponent {
       categoryName: '',
       inputQuantity: 0,
     };
+     
     this.products.push(newProduct);
   }
 
   onProductSelect(product: PartsObj, partId: number) {
-    if (partId) {
-      this.isDisable = true;
+ 
+    if (this.products.filter((x) => x.partId == product.partId).length > 1) {
+      product = {
+        partId: null,
+        partTitle: '',
+        partPrice: 0,
+        modelName: '',
+        qty: 0,
+        companyName: '',
+        categoryName: '',
+        inputQuantity: 0,
+      };
+           this.products[ partId] = product;
+         return  alert('Item already added');;
     }
-    const selectedProduct = this.transferredObject.find((p) => p.partId === Number(partId));
+    const selectedProduct = this.transferredObject.find(
+      (p) => p.partId === Number(partId)
+    );
     if (selectedProduct) {
       product.partId = partId;
       product.partTitle = selectedProduct.partTitle;
@@ -79,16 +96,20 @@ export class SalesOrderComponent {
       product.modelName = selectedProduct.modelName;
       product.companyName = selectedProduct.companyName;
       product.qty = selectedProduct.qty;
-    }
+    } 
+    product.inputQuantity = product.partId ? product.inputQuantity : 0;  
+    this.isRowDisabled(product);
   }
 
   saveProducts() {
-    this.isDisablePart = false; // Reset the flag
+    this.isDisablePart = false;
 
     this.products.forEach((element) => {
-      const selectedProduct = this.transferredObject.find((x) => x.partId == element.partId);
+      const selectedProduct = this.transferredObject.find(
+        (x) => x.partId == element.partId
+      );
       if (selectedProduct && element.inputQuantity > selectedProduct.qty) {
-        this.isDisablePart = true; // Set flag to true if input quantity exceeds inventory
+        this.isDisablePart = true;
       }
 
       if (selectedProduct) {
@@ -107,12 +128,15 @@ export class SalesOrderComponent {
   }
 
   getTotalAmount(): number {
-    return this.products.reduce((total, product) => total + product.inputQuantity * product.partPrice, 0);
+    return this.products.reduce(
+      (total, product) => total + product.inputQuantity * product.partPrice,
+      0
+    );
   }
 
   navigateIfNotDisabled() {
     if (!this.isDisablePart) {
-      this.isDisablePart = false; 
+      this.isDisablePart = false;
       this.router.navigate(['/']);
     }
   }
@@ -124,15 +148,24 @@ export class SalesOrderComponent {
   onInputChange(product: PartsObj) {
     if (product.inputQuantity <= 0) {
       product.inputQuantity = 0;
+   
     }
-    if (product.qty < product.inputQuantity) {
-      this.isDisablePart = true;
-    } else {
-      this.isDisablePart = false;
+    if(product.inputQuantity < 0){
+      return alert("Parts should be greater than zero");
     }
-  } 
+
+    this.isRowDisabled(product);  
+  }
 
   isSaveEnabled(): boolean {
-    return this.products.every((product) => product.partId !== null && product.inputQuantity > 0);
+    return this.products.every(
+      (product) => product.partId !== null && product.inputQuantity !== 0
+    );
+  }
+
+  
+
+  isRowDisabled(product: PartsObj): boolean {
+    return product.partId === null;
   }
 }

@@ -1,5 +1,5 @@
 <div class="container">
-  <button [routerLink]="['/']" routerLinkActive="router-link-active">
+  <button [routerLink]="['/']" routerLinkActive="router-link-active" class="back-button">
     Back
   </button>
   <table>
@@ -18,7 +18,7 @@
       <tr *ngFor="let product of products; let i = index">
         <td>
           <select 
-            [ngModel]="product.partId"
+            [(ngModel)]="product.partId"
             (ngModelChange)="onProductSelect(product, $event)"
           >
             <option
@@ -33,11 +33,11 @@
         <td>{{ product.qty - product.inputQuantity }}</td>
         <td>{{ product.qty }}</td>
         <td>
-          <input type="number" [(ngModel)]="product.inputQuantity" [disabled]="!isDisable" (change)="onInputChange(product)" min="0" />
+          <input type="number" [(ngModel)]="product.inputQuantity" [disabled]="isRowDisabled(product)" (change)="onInputChange(product)" min="0" />
         </td>
         <td>{{ product.inputQuantity * product.partPrice }}</td>
         <td>
-          <button (click)="removeRow(i)">Remove</button>
+          <button (click)="removeRow(i)" class="remove-button">Remove</button>
         </td>
       </tr>
     </tbody>
@@ -52,14 +52,14 @@
   <button 
     [disabled]="!allRowsSelected()" 
     (click)="addRow()" 
-    [ngClass]="{'disabled-button': !allRowsSelected()}"
+    class="add-row-button"
   >
     Add Row
   </button>
   <button 
-    [disabled]="!isSaveEnabled()"
-    (click)="saveProducts()"
-    [ngClass]="{'disabled-button': !isSaveEnabled()}"
+    [disabled]="isDisablePart || !isSaveEnabled()" 
+    (click)="saveProducts()" 
+    class="save-button"
   >
     Save
   </button>
