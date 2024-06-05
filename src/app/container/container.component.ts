@@ -84,11 +84,9 @@ export class ContainerComponent implements OnInit {
       data: part,
     });
   dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        
-       }
-       this.getAllParts();
-      console.log('The dialog was closed');
+    
+    this.getAllParts();
+   
     });  
   }
 

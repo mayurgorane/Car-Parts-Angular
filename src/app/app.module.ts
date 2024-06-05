@@ -22,6 +22,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+ 
 
 @NgModule({
   declarations: [
@@ -31,7 +32,7 @@ import { MatIconModule } from '@angular/material/icon';
     PartListComponent,
     FilterComponent,
     AddPartsComponent,
-    PartDetailComponent,
+    PartDetailComponent 
  
   ],
   imports: [
