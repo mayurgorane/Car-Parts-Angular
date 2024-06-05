@@ -7,4 +7,5 @@ export class Parts {
  
   categoryName: string = '';
   companyName: string = '';
+  inputQuantity? : number;
 }

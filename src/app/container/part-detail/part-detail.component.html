@@ -69,6 +69,21 @@
                 <label>Company Name</label>
                 <p>{{ Data.companyName }}</p>
               </div>
+
+           
+              
+            <div class="input-box"*ngIf="!isFormOpen">
+              <label>Current Inventory</label>
+              <p>{{ partObj.qty }}</p>
+            </div>
+            <div class="input-box"*ngIf="isFormOpen">
+                <label>Current Inventory</label>
+                <p>{{ Data.qty }}</p>
+              </div>
+
+
+
+
               <div class="input-box" *ngIf="isFormOpen">
                 <label>Inventory</label>
                 <div class="inventory-control">

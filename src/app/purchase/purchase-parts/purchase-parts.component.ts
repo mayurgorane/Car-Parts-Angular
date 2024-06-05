@@ -1,19 +1,9 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { partsService } from '../../service/partService.service';
 import { Parts } from '../../models/parts';
 import { Router } from '@angular/router';
  
-interface PartsObj {
-  partId: number;
-  partTitle: string;
-  partPrice: number;
-  companyName: string;
-  modelName: string;
-  qty: number;
-  categoryName: string;
-  inputQuantity: number;
-}
+ 
 @Component({
   selector: 'app-purchase-parts',
   templateUrl: './purchase-parts.component.html',
@@ -22,9 +12,10 @@ interface PartsObj {
 export class PurchasePartsComponent {
   transferredObject: Parts[] = [];
   partsInventory: Map<number, number>;
-  products: PartsObj[] = [];
+  products: Parts[] = [];
   isDisable: boolean = false;
   isDisablePart: boolean;
+ 
 
   constructor(private partService: partsService, private router: Router) {
     this.isDisablePart = false;
@@ -44,7 +35,7 @@ export class PurchasePartsComponent {
   }
 
   addRow() {
-    const newProduct: PartsObj = {
+    const newProduct: Parts = {
       partId: null,
       partTitle: '',
       partPrice: 0,
@@ -58,7 +49,7 @@ export class PurchasePartsComponent {
      
   }
 
-  onProductSelect(product: PartsObj, partId: number) {
+  onProductSelect(product: Parts, partId: number) {
  
     if (this.products.filter((x) => x.partId == product.partId).length > 1) {
       product = {
@@ -125,7 +116,7 @@ export class PurchasePartsComponent {
   allRowsSelected(): boolean {
     return this.products.every((product) => product.partId !== null);
   }
-  onInputChange(product: PartsObj) {
+  onInputChange(product: Parts) {
     if (product.inputQuantity <= 0) {
       product.inputQuantity = 0;
    
@@ -133,10 +124,11 @@ export class PurchasePartsComponent {
     if(product.inputQuantity < 0){
       return alert("Parts should be greater than zero");
     }
-
+  
+   
     this.isRowDisabled(product);  
   }
-  isRowDisabled(product: PartsObj): boolean {
+  isRowDisabled(product: Parts): boolean {
     return product.partId === null;
   }
   isSaveEnabled(): boolean {

@@ -30,19 +30,9 @@ export class PartDetailComponent implements OnInit {
     this.isFormClose.emit();
     this.isCloseButton.emit();
   }
-
-  decreaseQty() {
-    if (this.Data.qty > 0) {
-      this.Data.qty--;
-    }
-  }
-
-  increaseQty() {
-    this.Data.qty++;
-  }
-
+ 
   getData(qtyInp: any) {
-    this.Data.qty = qtyInp.value;
+    this.Data.qty = 1 *(qtyInp.value);
     this.isCloseButton.emit();
     this.qtyData.emit(this.Data);
   }

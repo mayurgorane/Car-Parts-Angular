@@ -96,12 +96,11 @@ export class ContainerComponent implements OnInit {
     this.partService.deletePart(deletePartId).subscribe();
     setTimeout(() => {
       this.getAllParts()
-     
-    }, 50);
+   }, 50);
     setTimeout(() => {
       alert('Part successfully deleted')
      
-    }, 75);
+    }, 100);
   }
  
 

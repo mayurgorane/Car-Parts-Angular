@@ -1,7 +1,10 @@
 <div class="container">
-  <button [routerLink]="['/']" routerLinkActive="router-link-active" class="back-button">
-    Back
-  </button>
+  <div class="header">
+    <button class="back-button" [routerLink]="['/']" routerLinkActive="router-link-active">
+      Back
+    </button>
+    <h1>Sales</h1>
+  </div>
   <table>
     <thead>
       <tr>
@@ -30,7 +33,7 @@
           </select>
         </td>
         <td>{{ product.partPrice }}</td>
-        <td>{{ product.qty - product.inputQuantity }}</td>
+        <td>{{ +(product.qty - product.inputQuantity) }}</td>
         <td>{{ product.qty }}</td>
         <td>
           <input type="number" [(ngModel)]="product.inputQuantity" [disabled]="isRowDisabled(product)" (change)="onInputChange(product)" min="0" />

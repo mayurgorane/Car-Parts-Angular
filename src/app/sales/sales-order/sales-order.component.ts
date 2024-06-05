@@ -1,27 +1,8 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import {Component,} from '@angular/core';
 import { Parts } from '../../models/parts';
 import { partsService } from '../../service/partService.service';
-import { Subscription, map } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { arrayBuffer } from 'node:stream/consumers';
-import { time } from 'node:console';
-import { Router } from '@angular/router';
-interface PartsObj {
-  partId: number;
-  partTitle: string;
-  partPrice: number;
-  companyName: string;
-  modelName: string;
-  qty: number;
-  categoryName: string;
-  inputQuantity: number;
-}
+ import { Router } from '@angular/router';
+ 
 @Component({
   selector: 'app-sales-order',
   templateUrl: './sales-order.component.html',
@@ -30,7 +11,7 @@ interface PartsObj {
 export class SalesOrderComponent {
   transferredObject: Parts[] = [];
   partsInventory: Map<number, number>;
-  products: PartsObj[] = [];
+  products: Parts[] = [];
   isDisable: boolean = false;
   isDisablePart: boolean;
   availableParts: Parts[];
@@ -56,7 +37,7 @@ export class SalesOrderComponent {
   }
 
   addRow() {
-    const newProduct: PartsObj = {
+    const newProduct: Parts = {
       partId: null,
       partTitle: '',
       partPrice: 0,
@@ -70,7 +51,7 @@ export class SalesOrderComponent {
     this.products.push(newProduct);
   }
 
-  onProductSelect(product: PartsObj, partId: number) {
+  onProductSelect(product: Parts, partId: number) {
  
     if (this.products.filter((x) => x.partId == product.partId).length > 1) {
       product = {
@@ -102,7 +83,7 @@ export class SalesOrderComponent {
   }
 
   saveProducts() {
-    this.isDisablePart = false;
+    
 
     this.products.forEach((element) => {
       const selectedProduct = this.transferredObject.find(
@@ -121,6 +102,8 @@ export class SalesOrderComponent {
       this.partService.setPartsArray(this.transferredObject);
       this.router.navigate(['/']);
     }
+
+    this.isSaveEnabled();
   }
 
   removeRow(index: number) {
@@ -145,7 +128,7 @@ export class SalesOrderComponent {
     return this.products.every((product) => product.partId !== null);
   }
 
-  onInputChange(product: PartsObj) {
+  onInputChange(product: Parts) {
     if (product.inputQuantity <= 0) {
       product.inputQuantity = 0;
    
@@ -159,13 +142,13 @@ export class SalesOrderComponent {
 
   isSaveEnabled(): boolean {
     return this.products.every(
-      (product) => product.partId !== null && product.inputQuantity !== 0
+      (product) => product.partId !== null && product.inputQuantity !== 0 && product.qty > product.inputQuantity
     );
   }
 
   
 
-  isRowDisabled(product: PartsObj): boolean {
+  isRowDisabled(product: Parts): boolean {
     return product.partId === null;
   }
   availableParts1(){
