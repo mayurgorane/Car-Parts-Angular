@@ -142,7 +142,7 @@ export class SalesOrderComponent {
 
   isSaveEnabled(): boolean {
     return this.products.every(
-      (product) => product.partId !== null && product.inputQuantity !== 0 && product.qty > product.inputQuantity
+      (product) => product.partId !== null && product.inputQuantity !== 0 && product.qty >= product.inputQuantity
     );
   }
 
